@@ -28,7 +28,7 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
         configurarEventosReservaciones();    // Para cargar datos de reservaciones
         configurarEventosClientes();          // Para cargar ID del cliente desde la tabla de clientes
         configurarEventosReservasYHabitaciones(); 
-        this.setSize(new Dimension(1124, 699));
+        this.setSize(new Dimension(1124, 538));
         this.setTitle("Reservaciones");
     }
 

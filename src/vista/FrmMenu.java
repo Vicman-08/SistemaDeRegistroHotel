@@ -1,5 +1,6 @@
 package vista;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JDesktopPane;
 
@@ -9,16 +10,15 @@ import javax.swing.JDesktopPane;
  * @author Victor
  */
 public class FrmMenu extends javax.swing.JFrame {
-
     public static JDesktopPane jDesktopPane_menu;
-    
+    private Color defaultButtonColor;
+    //private Color selectedButtonColor = new Color(173, 216, 230); // Azul claro
     public FrmMenu() {
         initComponents();
         this.setSize(new Dimension(1320,700));
         this.setExtendedState(this.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         this.setTitle("Sistema De Registro Administrador");
-        
         this.setLayout(null);
         jDesktopPane_menu = new JDesktopPane();
         
@@ -40,11 +40,11 @@ public class FrmMenu extends javax.swing.JFrame {
 
         jMenuBar1 = new javax.swing.JMenuBar();
         User = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu7 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        jMenu5 = new javax.swing.JMenu();
+        Habitacion = new javax.swing.JMenu();
+        Reservacion = new javax.swing.JMenu();
+        Cliente = new javax.swing.JMenu();
+        Servicio = new javax.swing.JMenu();
+        Factura = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
         CerrarSesion = new javax.swing.JMenuItem();
 
@@ -68,70 +68,70 @@ public class FrmMenu extends javax.swing.JFrame {
         });
         jMenuBar1.add(User);
 
-        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/nuevo-cliente.png"))); // NOI18N
-        jMenu2.setText("Habitaciones");
-        jMenu2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jMenu2.setPreferredSize(new java.awt.Dimension(150, 50));
-        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+        Habitacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/nuevo-cliente.png"))); // NOI18N
+        Habitacion.setText("Habitaciones");
+        Habitacion.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        Habitacion.setPreferredSize(new java.awt.Dimension(150, 50));
+        Habitacion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu2MouseClicked(evt);
+                HabitacionMouseClicked(evt);
             }
         });
-        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+        Habitacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu2ActionPerformed(evt);
+                HabitacionActionPerformed(evt);
             }
         });
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(Habitacion);
 
-        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/anadir.png"))); // NOI18N
-        jMenu3.setText("Reservaciones");
-        jMenu3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jMenu3.setPreferredSize(new java.awt.Dimension(150, 50));
-        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+        Reservacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/anadir.png"))); // NOI18N
+        Reservacion.setText("Reservaciones");
+        Reservacion.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        Reservacion.setPreferredSize(new java.awt.Dimension(150, 50));
+        Reservacion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu3MouseClicked(evt);
+                ReservacionMouseClicked(evt);
             }
         });
-        jMenu3.addActionListener(new java.awt.event.ActionListener() {
+        Reservacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu3ActionPerformed(evt);
+                ReservacionActionPerformed(evt);
             }
         });
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(Reservacion);
 
-        jMenu7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cliente.png"))); // NOI18N
-        jMenu7.setText("Clientes");
-        jMenu7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jMenu7.setPreferredSize(new java.awt.Dimension(150, 50));
-        jMenu7.addMouseListener(new java.awt.event.MouseAdapter() {
+        Cliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cliente.png"))); // NOI18N
+        Cliente.setText("Clientes");
+        Cliente.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        Cliente.setPreferredSize(new java.awt.Dimension(150, 50));
+        Cliente.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu7MouseClicked(evt);
+                ClienteMouseClicked(evt);
             }
         });
-        jMenuBar1.add(jMenu7);
+        jMenuBar1.add(Cliente);
 
-        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/carrito.png"))); // NOI18N
-        jMenu4.setText("Servicios");
-        jMenu4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jMenu4.setPreferredSize(new java.awt.Dimension(150, 50));
-        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+        Servicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/carrito.png"))); // NOI18N
+        Servicio.setText("Servicios");
+        Servicio.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        Servicio.setPreferredSize(new java.awt.Dimension(150, 50));
+        Servicio.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu4MouseClicked(evt);
+                ServicioMouseClicked(evt);
             }
         });
-        jMenuBar1.add(jMenu4);
+        jMenuBar1.add(Servicio);
 
-        jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/reporte1.png"))); // NOI18N
-        jMenu5.setText("Factura");
-        jMenu5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jMenu5.setPreferredSize(new java.awt.Dimension(150, 50));
-        jMenu5.addMouseListener(new java.awt.event.MouseAdapter() {
+        Factura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/reporte1.png"))); // NOI18N
+        Factura.setText("Factura");
+        Factura.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        Factura.setPreferredSize(new java.awt.Dimension(150, 50));
+        Factura.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu5MouseClicked(evt);
+                FacturaMouseClicked(evt);
             }
         });
-        jMenuBar1.add(jMenu5);
+        jMenuBar1.add(Factura);
 
         jMenu6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cerrar-sesion.png"))); // NOI18N
         jMenu6.setText("Cerrar Sesion");
@@ -171,50 +171,55 @@ public class FrmMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_UserMouseClicked
 
     private void UserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserActionPerformed
-        
+        //updateButtonColors(User);
     }//GEN-LAST:event_UserActionPerformed
 
     private void CerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CerrarSesionMouseClicked
         resaltarMenu(User);
     }//GEN-LAST:event_CerrarSesionMouseClicked
 
-    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+    private void HabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HabitacionActionPerformed
         
-    }//GEN-LAST:event_jMenu2ActionPerformed
+    }//GEN-LAST:event_HabitacionActionPerformed
 
-    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+    private void HabitacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HabitacionMouseClicked
         InterHabitaciones interHabitaciones = new InterHabitaciones(); 
         abrirInternalFrame(interHabitaciones); 
         resaltarMenu(User);
-    }//GEN-LAST:event_jMenu2MouseClicked
+        //updateButtonColors(btn_users);
+    }//GEN-LAST:event_HabitacionMouseClicked
 
-    private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
+    private void ReservacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReservacionActionPerformed
         
-    }//GEN-LAST:event_jMenu3ActionPerformed
+    }//GEN-LAST:event_ReservacionActionPerformed
 
-    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+    private void ReservacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReservacionMouseClicked
         InterReservaciones interReservaciones = new InterReservaciones(); 
         abrirInternalFrame(interReservaciones); 
         resaltarMenu(User);
-    }//GEN-LAST:event_jMenu3MouseClicked
+        //updateButtonColors(btn_users);
+    }//GEN-LAST:event_ReservacionMouseClicked
 
-    private void jMenu7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu7MouseClicked
+    private void ClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ClienteMouseClicked
         InterClientes interClientes = new InterClientes(); 
         abrirInternalFrame(interClientes);
         resaltarMenu(User);
-    }//GEN-LAST:event_jMenu7MouseClicked
+        //updateButtonColors(btn_users);
+    }//GEN-LAST:event_ClienteMouseClicked
 
-    private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
+    private void ServicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ServicioMouseClicked
         InterServicios interFacturas = new InterServicios(); 
         abrirInternalFrame(interFacturas); 
         resaltarMenu(User);
-    }//GEN-LAST:event_jMenu4MouseClicked
+        //updateButtonColors(btn_users);
+    }//GEN-LAST:event_ServicioMouseClicked
 
-    private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
+    private void FacturaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FacturaMouseClicked
         InterFactura interFactura = new InterFactura(); 
         abrirInternalFrame(interFactura); 
         resaltarMenu(User);
-    }//GEN-LAST:event_jMenu5MouseClicked
+       // updateButtonColors(btn_users);
+    }//GEN-LAST:event_FacturaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -253,13 +258,13 @@ public class FrmMenu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem CerrarSesion;
+    private javax.swing.JMenu Cliente;
+    private javax.swing.JMenu Factura;
+    private javax.swing.JMenu Habitacion;
+    private javax.swing.JMenu Reservacion;
+    private javax.swing.JMenu Servicio;
     private javax.swing.JMenu User;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
-    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
 
@@ -280,15 +285,24 @@ public class FrmMenu extends javax.swing.JFrame {
 
     // Restablecer el color de todos los menús
     User.setBackground(defaultColor);
-    jMenu2.setBackground(defaultColor);
-    jMenu3.setBackground(defaultColor);
-    jMenu7.setBackground(defaultColor);
-    jMenu4.setBackground(defaultColor);
+    Habitacion.setBackground(defaultColor);
+    Reservacion.setBackground(defaultColor);
+    Cliente.setBackground(defaultColor);
+    Servicio.setBackground(defaultColor);
     jMenu6.setBackground(defaultColor);
 
     // Cambiar el color del menú que fue clicado
     clickedMenu.setBackground(selectedColor);
 }
 
+/*private void updateButtonColors(javax.swing.JButton selectedButton) {
+    // Restaurar todos los botones al color por defecto
+    User.setBackground(defaultButtonColor);
+    Habitacion.setBackground(defaultButtonColor);
+    btn_books.setBackground(defaultButtonColor);
+    Habitacion.setBackground(defaultButtonColor);
 
+    // Establecer el color seleccionado en el botón activo
+    selectedButton.setBackground(selectedButtonColor);
+}*/
 }

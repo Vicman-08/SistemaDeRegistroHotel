@@ -6,8 +6,24 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.*;
+import java.util.Properties;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.*;
+import java.util.Properties;
+import javax.swing.JOptionPane;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+
 /**
  *
  * @author Victor
@@ -21,6 +37,8 @@ public class InterFactura extends javax.swing.JInternalFrame {
         initComponents();
         cargarReservasEnTabla();
         cargarFacturasEnTabla();
+        this.setSize(new Dimension(944, 265));
+        this.setTitle("Factura");
     }
 
     /**
@@ -87,13 +105,13 @@ public class InterFactura extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 322, Short.MAX_VALUE))
+                .addGap(0, 22, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(163, 163, 163)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Factura)
-                .addGap(475, 475, 475))
+                .addGap(201, 201, 201))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,10 +122,10 @@ public class InterFactura extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Factura)
-                    .addComponent(jButton1))
-                .addContainerGap(470, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(Factura))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         pack();
@@ -131,102 +149,163 @@ public class InterFactura extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane4;
     // End of variables declaration//GEN-END:variables
 
-    public void generarFacturaDesdeTabla() {
-        // Obtener la fila seleccionada
-        int filaSeleccionada = TablaFacturas.getSelectedRow();
 
-        if (filaSeleccionada < 0) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una factura de la tabla.");
-            return;
-        }
+public void generarFacturaDesdeTabla() {
+    // Obtener la fila seleccionada
+    int filaSeleccionada = TablaFacturas.getSelectedRow();
 
-        // Obtener el idFactura de la fila seleccionada
-        int idFactura = Integer.parseInt(TablaFacturas.getValueAt(filaSeleccionada, 0).toString());
-        String rutaCarpeta = "C:\\Users\\Victor\\Documents\\Proyecto final TA\\PDF BDHotel";
-        String fileName = rutaCarpeta + "\\Factura_" + idFactura + ".pdf";
+    if (filaSeleccionada < 0) {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una factura de la tabla.");
+        return;
+    }
 
-        // Consulta SQL para obtener los datos de la factura seleccionada
-        String query = "SELECT f.idFactura, f.fecha_emision, f.total_habitacion, f.total_servicios, f.total, " +
-                       "c.nombre, c.apellidoPaterno, c.apellidoMaterno, " +
-                       "GROUP_CONCAT(h.idHabitacion SEPARATOR ', ') AS habitaciones " +
-                       "FROM Factura f " +
-                       "JOIN HabitacionReserva hr ON f.idHabitacionReserva = hr.idHabitacionReserva " +
-                       "JOIN Reserva r ON hr.idReserva = r.idReserva " +
-                       "JOIN Cliente c ON r.idCliente = c.idCliente " +
-                       "JOIN Habitacion h ON hr.idHabitacion = h.idHabitacion " +
-                       "WHERE f.idFactura = ? " +
-                       "GROUP BY f.idFactura";
+    // Obtener el idFactura de la fila seleccionada
+    int idFactura = Integer.parseInt(TablaFacturas.getValueAt(filaSeleccionada, 0).toString());
+    String rutaCarpeta = "C:\\Users\\Victor\\Documents\\Proyecto final TA\\PDF BDHotel";
+    String fileName = rutaCarpeta + "\\Factura_" + idFactura + ".pdf";
 
-        try (Connection conn = Conexion.conectar();
-             PreparedStatement pst = conn.prepareStatement(query)) {
+    // Consulta SQL para obtener los datos de la factura seleccionada
+    String query = "SELECT f.idFactura, f.fecha_emision, f.total_habitacion, f.total_servicios, f.total, " +
+                   "c.nombre, c.apellidoPaterno, c.apellidoMaterno, " +
+                   "GROUP_CONCAT(h.idHabitacion SEPARATOR ', ') AS habitaciones " +
+                   "FROM Factura f " +
+                   "JOIN HabitacionReserva hr ON f.idHabitacionReserva = hr.idHabitacionReserva " +
+                   "JOIN Reserva r ON hr.idReserva = r.idReserva " +
+                   "JOIN Cliente c ON r.idCliente = c.idCliente " +
+                   "JOIN Habitacion h ON hr.idHabitacion = h.idHabitacion " +
+                   "WHERE f.idFactura = ? " +
+                   "GROUP BY f.idFactura";
 
-            pst.setInt(1, idFactura);
-            ResultSet rs = pst.executeQuery();
+    try (Connection conn = Conexion.conectar();
+         PreparedStatement pst = conn.prepareStatement(query)) {
 
-            if (rs.next()) {
-                // Crear la carpeta si no existe
-                File carpeta = new File(rutaCarpeta);
-                if (!carpeta.exists()) {
-                    carpeta.mkdirs();
-                }
+        pst.setInt(1, idFactura);
+        ResultSet rs = pst.executeQuery();
 
-                // Crear el documento PDF
-                Document document = new Document();
-                PdfWriter.getInstance(document, new FileOutputStream(fileName));
-                document.open();
-
-                // Título
-                Paragraph title = new Paragraph("Factura #" + idFactura, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18));
-                title.setAlignment(Element.ALIGN_CENTER);
-                document.add(title);
-                document.add(new Paragraph(" "));
-
-                // Información del cliente
-                document.add(new Paragraph("Cliente: " + rs.getString("nombre") + " " +
-                                           rs.getString("apellidoPaterno") + " " +
-                                           rs.getString("apellidoMaterno")));
-                document.add(new Paragraph("Fecha de emisión: " + rs.getTimestamp("fecha_emision").toString()));
-                document.add(new Paragraph("Habitaciones: " + rs.getString("habitaciones")));
-                document.add(new Paragraph(" "));
-
-                // Detalles de la factura
-                PdfPTable table = new PdfPTable(2);
-                table.setWidthPercentage(100);
-                table.setSpacingBefore(10f);
-
-                table.addCell("Total Habitación:");
-                table.addCell("$" + rs.getDouble("total_habitacion"));
-
-                table.addCell("Total Servicios:");
-                table.addCell("$" + rs.getDouble("total_servicios"));
-
-                table.addCell("Total a Pagar:");
-                table.addCell("$" + rs.getDouble("total"));
-
-                document.add(table);
-
-                // Cerrar el documento
-                document.close();
-
-                JOptionPane.showMessageDialog(this, "Factura generada correctamente: " + fileName);
-
-                // Abrir el PDF automáticamente
-                File pdfFile = new File(fileName);
-                if (pdfFile.exists()) {
-                    Desktop.getDesktop().open(pdfFile);
-                } else {
-                    JOptionPane.showMessageDialog(this, "El archivo PDF no se encontró.");
-                }
-
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró la factura seleccionada.");
+        if (rs.next()) {
+            // Crear la carpeta si no existe
+            File carpeta = new File(rutaCarpeta);
+            if (!carpeta.exists()) {
+                carpeta.mkdirs();
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al generar la factura: " + e.getMessage());
+            // Crear el documento PDF
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(fileName));
+            document.open();
+
+            // Título
+            Paragraph title = new Paragraph("Factura #" + idFactura, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18));
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph(" "));
+
+            // Información del cliente
+            document.add(new Paragraph("Cliente: " + rs.getString("nombre") + " " +
+                                       rs.getString("apellidoPaterno") + " " +
+                                       rs.getString("apellidoMaterno")));
+            document.add(new Paragraph("Fecha de emisión: " + rs.getTimestamp("fecha_emision").toString()));
+            document.add(new Paragraph("Habitaciones: " + rs.getString("habitaciones")));
+            document.add(new Paragraph(" "));
+
+            // Detalles de la factura
+            PdfPTable table = new PdfPTable(2);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10f);
+
+            table.addCell("Total Habitación:");
+            table.addCell("$" + rs.getDouble("total_habitacion"));
+
+            table.addCell("Total Servicios:");
+            table.addCell("$" + rs.getDouble("total_servicios"));
+
+            table.addCell("Total a Pagar:");
+            table.addCell("$" + rs.getDouble("total"));
+
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+
+            JOptionPane.showMessageDialog(this, "Factura generada correctamente: " + fileName);
+
+            // Abrir el PDF automáticamente
+            File pdfFile = new File(fileName);
+            if (pdfFile.exists()) {
+                Desktop.getDesktop().open(pdfFile);
+            } else {
+                JOptionPane.showMessageDialog(this, "El archivo PDF no se encontró.");
+                return;
+            }
+
+            // Enviar el correo a una dirección fija
+            String emailDestino = "vicman08hvx@gmail.com";  // Correo del destinatario fijo
+            enviarCorreoConAdjunto(emailDestino, fileName);
+
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró la factura seleccionada.");
         }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al generar la factura: " + e.getMessage());
     }
+}
+
+private void enviarCorreoConAdjunto(String emailDestino, String filePath) {
+    // Configuración del servidor SMTP (usando Gmail como ejemplo)
+    final String remitente = "22161075@itoaxaca.edu.mx"; // Cambia por tu correo
+    final String password = "*******";            // Cambia por tu contraseña o token de aplicación
+
+    // Configuración de propiedades
+    Properties props = new Properties();
+    props.put("mail.smtp.auth", "true");
+    props.put("mail.smtp.starttls.enable", "true");
+    props.put("mail.smtp.host", "smtp.gmail.com");
+    props.put("mail.smtp.port", "587");
+
+    // Crear la sesión de correo
+    Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+        protected PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(remitente, password);
+        }
+    });
+
+    try {
+        // Crear el mensaje
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(remitente));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailDestino));
+        message.setSubject("Factura Generada");
+
+        // Cuerpo del mensaje
+        MimeBodyPart mensajeTexto = new MimeBodyPart();
+        mensajeTexto.setText("Adjunto encontrará su factura en formato PDF.");
+
+        // Adjuntar el archivo PDF
+        MimeBodyPart adjunto = new MimeBodyPart();
+        DataSource source = new FileDataSource(filePath);
+        adjunto.setDataHandler(new DataHandler(source));
+        adjunto.setFileName(new File(filePath).getName());
+
+        // Combinar partes en el mensaje
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(mensajeTexto);
+        multipart.addBodyPart(adjunto);
+
+        message.setContent(multipart);
+
+        // Enviar el correo
+        Transport.send(message);
+        JOptionPane.showMessageDialog(this, "Correo enviado exitosamente a: " + emailDestino);
+
+    } catch (MessagingException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al enviar el correo: " + e.getMessage());
+    }
+}
+
+
 
 
 private void cargarFacturasEnTabla() {
@@ -402,6 +481,7 @@ private void cargarReservasEnTabla() {
         JOptionPane.showMessageDialog(this, "Error al crear la factura: " + e.getMessage());
     }
 }
+
 
 
 }

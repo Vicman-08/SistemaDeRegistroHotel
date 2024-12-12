@@ -25,7 +25,7 @@ public class InterServicios extends javax.swing.JInternalFrame {
         initComponents();
         cargarReservaciones();
         cargarServiciosEnTabla();
-        this.setSize(new Dimension(890, 407));
+        this.setSize(new Dimension(1061, 411));
         this.setTitle("Reservaciones");
     }
 
@@ -150,11 +150,9 @@ public class InterServicios extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButton1)
-                                    .addComponent(jButton2))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(jButton2)))
+                            .addComponent(jLabel3))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -192,7 +190,7 @@ public class InterServicios extends javax.swing.JInternalFrame {
                         .addComponent(txt_Descripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton2))
                     .addComponent(jButton1))
-                .addContainerGap(396, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
