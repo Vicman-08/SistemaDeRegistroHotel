@@ -77,27 +77,53 @@ La siguiente imagen muestra la estructura del proyecto:
 
 ### Pantalla de Inicio de Sesión
 
+![image](https://github.com/user-attachments/assets/c662b4aa-804b-4c81-a58d-1375e818875c)
 
 
 - **Propósito:** Permitir a los usuarios autenticarse en el sistema.
 - **Campos:**
   - **Usuario:** Campo de texto para ingresar el nombre de usuario.
   - **Contraseña:** Campo de texto protegido para ingresar la contraseña.
-- **Botón "Iniciar Sesión":** Valida las credenciales ingresadas contra la base de datos y, si son correctas, permite el acceso al sistema.
+- **Botón "Iniciar Sesión":** Valida las credenciales ingresadas contra la base de datos y si son correctas, permite el acceso al sistema.
 
 ### Menú Principal
 
-
+- **Menu principal Administrador:**
 
 - **Propósito:** Actuar como un panel de control para acceder a las diferentes funcionalidades del sistema.
+ ![image](https://github.com/user-attachments/assets/ae29c143-1285-43d8-b204-af6899809ce7)
+
+- **Menu principal Recepcionista:**
+
+- **Propósito:** Actuar como un panel de control para acceder a las diferentes funcionalidades del sistema, en el roll de recepcionista, lo cual nos muestra un panel modificado con unas funciones recortadas que solo el panel administrador posee.
+![image](https://github.com/user-attachments/assets/624470ee-d694-4c71-b680-d34025b5ca13)
+
 - **Opciones Disponibles:**
-  - **Usuarios:** Gestiona los usuarios del sistema (crear, editar, eliminar).
-  - **Habitaciones:** Administra la información de las habitaciones.
+  - **Usuarios:** Gestiona los usuarios del sistema (crear, editar), al crear un usuario valida que los campos sean correctos, al seleccionar una fila de la tabla usuarios, se rellena en automatico los campos y solo edita lo que se modifica.
+    ![image](https://github.com/user-attachments/assets/7e031eae-d54f-4543-b2e9-8237131dae39)
+
+  - **Habitaciones:** Administra la información de las habitaciones, asi como tambien crea y edita una habitacion para editar solo basta con seleccionar.
+    ![image](https://github.com/user-attachments/assets/c14c17c8-d3d2-4694-bc9b-af4d9daee388)
+
   - **Reservaciones:** Permite realizar y gestionar reservaciones de habitaciones.
-  - **Clientes:** Maneja el registro y actualización de clientes.
-  - **Servicios:** Gestiona servicios adicionales ofrecidos por el hotel.
-  - **Factura:** Genera facturas para las reservaciones y servicios.
+       -Crear una reserva seleccionando un cliente de la tabla clientes.
+       -Asigna las habitaciones a esa reserva, para ver la habitaciones selecciona la fecha inicio y fin y dale buscar.
+       -Al selecionar una habitacion y una reserva le das en asignar y se acompleta la reservacion.
+    ![image](https://github.com/user-attachments/assets/0bf71232-28e0-4dea-8850-e4f96714f3be)
+
+  - **Clientes:** Maneja el registro y actualización de clientes, crea y edita los clientes, para editar un cliente solo selecciona una fila la tabla.
+    ![image](https://github.com/user-attachments/assets/96f17703-adfe-4008-bdcf-20846a0c8671)
+
+  - **Servicios:** Gestiona servicios adicionales ofrecidos por el hotel, para crear un servicio se selecciona la reserva que solicita un servicio.
+    ![image](https://github.com/user-attachments/assets/b39c5dc6-aec3-4ef7-9d69-51b472d6b2b7)
+
+  - **Factura:** Genera facturas para las reservaciones y servicios, primero se factura y cobra seleccionando una resrva, para enviar al correo se selecciona una factura generada y se envia en automatico al          correo del cliente.
+    ![image](https://github.com/user-attachments/assets/17cfc575-267d-4e0c-a186-fa38e557869b)
+
   - **Cerrar Sesión:** Finaliza la sesión del usuario actual y regresa a la pantalla de inicio de sesión.
+   ![image](https://github.com/user-attachments/assets/356b2b14-d305-44a1-aef4-3b046003a884)
+
+
 
 ---
 
