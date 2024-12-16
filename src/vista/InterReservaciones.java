@@ -1,13 +1,9 @@
 package vista;
 
-
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
 import conexion.Conexion;
 import java.awt.Dimension;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -25,10 +21,8 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
         cargarClientesEnTabla();  
         cargarReservaciones();
         cargarEstadosReserva();
-        configurarEventosReservaciones();    // Para cargar datos de reservaciones
-        configurarEventosClientes();          // Para cargar ID del cliente desde la tabla de clientes
-        configurarEventosReservasYHabitaciones(); 
-        this.setSize(new Dimension(1124, 538));
+        configurarEventos();
+        this.setSize(new Dimension(1304, 710));
         this.setTitle("Reservaciones");
     }
 
@@ -42,75 +36,62 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        TablaHabitacionReservacion = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        TablaReservacion = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         ComboEstadoReserva = new javax.swing.JComboBox<>();
-        txt_inicioFecha = new javax.swing.JTextField();
-        txt_finFecha = new javax.swing.JTextField();
-        txt_IdCliente = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         TableClientes = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         TableHabitacionesDisponibles = new javax.swing.JTable();
         crearReserva = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        txt_FechaInicioBuscar = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        txt_FechaFinBuscar = new javax.swing.JTextField();
+        Editar = new javax.swing.JButton();
         BuscarHabitaciones = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
-        txt_IdReserva2 = new javax.swing.JTextField();
-        txt_IdHabitacion2 = new javax.swing.JTextField();
+        txt_IdReserva = new javax.swing.JTextField();
+        txt_IdHabitacion = new javax.swing.JTextField();
         Asignar = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
-        TablaReservaciones = new javax.swing.JTable();
-        jButton4 = new javax.swing.JButton();
+        TablaHabitacionReservacion = new javax.swing.JTable();
+        Limpiar = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jDateChooserInicio = new com.toedter.calendar.JDateChooser();
+        jDateChooserFin = new com.toedter.calendar.JDateChooser();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        Borrar = new javax.swing.JButton();
+        txt_IdCliente = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(1200, 500));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        TablaHabitacionReservacion.setModel(new javax.swing.table.DefaultTableModel(
+        TablaReservacion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID Reserva", "Cliente", "Habitacion", "Fecha Inicio", "Fecha Fin", "Fecha Reserva", "Estado"
+                "ID Reserva", "ID Cliente", "Cliente", "Habitacion", "Fecha Inicio", "Fecha Fin", "Fecha Reserva", "Estado"
             }
         ));
-        jScrollPane1.setViewportView(TablaHabitacionReservacion);
+        jScrollPane1.setViewportView(TablaReservacion);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 160));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 650, 160));
 
-        jLabel1.setText("Fecha de Inicio");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, -1, -1));
+        jLabel3.setText("ID Cliente:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, -1, -1));
 
-        jLabel2.setText("Fecha de Fin");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 170, -1, -1));
-
-        jLabel3.setText("ID Cliente");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
-
-        jLabel4.setText("Estado");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 170, -1, -1));
+        jLabel4.setText("Estado:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 460, -1, -1));
 
         ComboEstadoReserva.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(ComboEstadoReserva, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 190, 80, -1));
-
-        txt_inicioFecha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_inicioFechaActionPerformed(evt);
-            }
-        });
-        getContentPane().add(txt_inicioFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 90, -1));
-        getContentPane().add(txt_finFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 190, 80, -1));
-        getContentPane().add(txt_IdCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 80, -1));
+        getContentPane().add(ComboEstadoReserva, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 480, 90, 30));
 
         TableClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -125,7 +106,7 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
         ));
         jScrollPane2.setViewportView(TableClientes);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 0, 460, 160));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 40, 610, 160));
 
         TableHabitacionesDisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -140,7 +121,7 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
         ));
         jScrollPane3.setViewportView(TableHabitacionesDisponibles);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 240, 460, 160));
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 650, 200));
 
         crearReserva.setText("Crear");
         crearReserva.addActionListener(new java.awt.event.ActionListener() {
@@ -148,23 +129,15 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
                 crearReservaActionPerformed(evt);
             }
         });
-        getContentPane().add(crearReserva, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 230, -1, -1));
+        getContentPane().add(crearReserva, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 520, -1, -1));
 
-        jButton1.setText("Editar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Editar.setText("Editar");
+        Editar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                EditarActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, -1, -1));
-        getContentPane().add(txt_FechaInicioBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 210, 110, -1));
-
-        jLabel9.setText("Fecha Inicio:");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 190, -1, -1));
-
-        jLabel10.setText("Fecha Fin:");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 190, -1, -1));
-        getContentPane().add(txt_FechaFinBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 210, 100, -1));
+        getContentPane().add(Editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 520, -1, -1));
 
         BuscarHabitaciones.setText("Buscar");
         BuscarHabitaciones.addActionListener(new java.awt.event.ActionListener() {
@@ -172,12 +145,13 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
                 BuscarHabitacionesActionPerformed(evt);
             }
         });
-        getContentPane().add(BuscarHabitaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 210, -1, -1));
+        getContentPane().add(BuscarHabitaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 520, -1, -1));
 
-        jLabel11.setText("Asignar Habitacion:");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, -1, -1));
-        getContentPane().add(txt_IdReserva2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 80, -1));
-        getContentPane().add(txt_IdHabitacion2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 300, 80, -1));
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel11.setText("Reservaciones con sus habitaciones:");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 210, -1, -1));
+        getContentPane().add(txt_IdReserva, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 490, 80, -1));
+        getContentPane().add(txt_IdHabitacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 490, 80, -1));
 
         Asignar.setText("Asignar");
         Asignar.addActionListener(new java.awt.event.ActionListener() {
@@ -185,9 +159,9 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
                 AsignarActionPerformed(evt);
             }
         });
-        getContentPane().add(Asignar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 300, -1, -1));
+        getContentPane().add(Asignar, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 490, -1, -1));
 
-        TablaReservaciones.setModel(new javax.swing.table.DefaultTableModel(
+        TablaHabitacionReservacion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -198,35 +172,66 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
                 "Cliente", "Fecha Inicio", "Fecha Fin", "Fecha Reserva", "Habitaciones"
             }
         ));
-        jScrollPane4.setViewportView(TablaReservaciones);
+        jScrollPane4.setViewportView(TablaHabitacionReservacion);
 
-        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, -1, 140));
+        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 250, 610, 200));
 
-        jButton4.setText("Limpiar");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        Limpiar.setText("Limpiar");
+        Limpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                LimpiarActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 230, -1, -1));
+        getContentPane().add(Limpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 480, 90, 30));
+
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel5.setText("Resrvaciones:");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel6.setText("Clientes:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 10, -1, -1));
+        getContentPane().add(jDateChooserInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 480, 120, 30));
+        getContentPane().add(jDateChooserFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 480, 120, 30));
+
+        jLabel7.setText("Reservacion:");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 470, -1, -1));
+
+        jLabel8.setText("Habitacion:");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 470, -1, -1));
+
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel12.setText("Habitaciones Disponible:");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, -1, -1));
+
+        Borrar.setText("Borrar");
+        Borrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BorrarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Borrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 520, -1, -1));
+        getContentPane().add(txt_IdCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 480, 80, 30));
+
+        jLabel1.setText("Fecha Inicio:");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 460, -1, -1));
+
+        jLabel2.setText("Fecha Fin:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 460, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txt_inicioFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_inicioFechaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_inicioFechaActionPerformed
 
     private void BuscarHabitacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarHabitacionesActionPerformed
         buscarHabitacionesDisponibles();
     }//GEN-LAST:event_BuscarHabitacionesActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarActionPerformed
         this.editarReservacion();
         cargarDatos();
         cargarClientesEnTabla();  
         cargarReservaciones();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_EditarActionPerformed
 
     private void crearReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearReservaActionPerformed
         this.crearReservacion();
@@ -242,47 +247,56 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
         cargarReservaciones();
     }//GEN-LAST:event_AsignarActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void LimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LimpiarActionPerformed
         txt_IdCliente.setText("");
-        txt_inicioFecha.setText("");
-        txt_finFecha.setText("");
+        jDateChooserInicio.setDate(null);
+        jDateChooserFin.setDate(null);
         ComboEstadoReserva.setSelectedIndex(-1);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_LimpiarActionPerformed
+
+    private void BorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BorrarActionPerformed
+        this.borrarReserva();
+        cargarDatos();
+        cargarClientesEnTabla();  
+        cargarReservaciones();
+    }//GEN-LAST:event_BorrarActionPerformed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Asignar;
+    private javax.swing.JButton Borrar;
     private javax.swing.JButton BuscarHabitaciones;
     private javax.swing.JComboBox<String> ComboEstadoReserva;
+    private javax.swing.JButton Editar;
+    private javax.swing.JButton Limpiar;
     private javax.swing.JTable TablaHabitacionReservacion;
-    private javax.swing.JTable TablaReservaciones;
+    private javax.swing.JTable TablaReservacion;
     private javax.swing.JTable TableClientes;
     private javax.swing.JTable TableHabitacionesDisponibles;
     private javax.swing.JButton crearReserva;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
+    private com.toedter.calendar.JDateChooser jDateChooserFin;
+    private com.toedter.calendar.JDateChooser jDateChooserInicio;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextField txt_FechaFinBuscar;
-    private javax.swing.JTextField txt_FechaInicioBuscar;
     private javax.swing.JTextField txt_IdCliente;
-    private javax.swing.JTextField txt_IdHabitacion2;
-    private javax.swing.JTextField txt_IdReserva2;
-    private javax.swing.JTextField txt_finFecha;
-    private javax.swing.JTextField txt_inicioFecha;
+    private javax.swing.JTextField txt_IdHabitacion;
+    private javax.swing.JTextField txt_IdReserva;
     // End of variables declaration//GEN-END:variables
-
     private void cargarDatos() {
-    String query = "SELECT r.idReserva, c.nombre, c.apellidoPaterno, c.apellidoMaterno, " +
+    // Consulta SQL actualizada para incluir ID Cliente
+    String query = "SELECT r.idReserva, c.idCliente, c.nombre, c.apellidoPaterno, c.apellidoMaterno, " +
                    "r.fecha_inicio, r.fecha_fin, r.fecha_reserva, er.estado AS estadoReserva " +
                    "FROM Reserva r " +
                    "JOIN Cliente c ON r.idCliente = c.idCliente " +
@@ -293,26 +307,28 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
          java.sql.Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(query)) {
 
-        // Crear un modelo con las columnas correctas (sin la columna de Habitación)
+        // Crear el modelo de la tabla con las columnas correctas
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(new String[]{
-            "ID Reserva", "Cliente", "Fecha Inicio", "Fecha Fin", "Fecha Reserva", "Estado"
+            "ID Reserva", "ID Cliente", "Cliente", "Fecha Inicio", "Fecha Fin", "Fecha Reserva", "Estado"
         });
 
         // Recorrer el ResultSet y llenar el modelo
         while (rs.next()) {
-            Object[] row = new Object[6];
-            row[0] = rs.getInt("idReserva");
-            row[1] = rs.getString("nombre") + " " + rs.getString("apellidoPaterno") + " " + rs.getString("apellidoMaterno");
-            row[2] = rs.getDate("fecha_inicio");
-            row[3] = rs.getDate("fecha_fin");
-            row[4] = rs.getTimestamp("fecha_reserva");
-            row[5] = rs.getString("estadoReserva");
+            Object[] row = new Object[7];
+            row[0] = rs.getInt("idReserva"); // ID Reserva
+            row[1] = rs.getInt("idCliente"); // ID Cliente
+            row[2] = rs.getString("nombre") + " " + rs.getString("apellidoPaterno") + " " + rs.getString("apellidoMaterno"); // Cliente
+            row[3] = rs.getDate("fecha_inicio"); // Fecha Inicio
+            row[4] = rs.getDate("fecha_fin"); // Fecha Fin
+            row[5] = rs.getTimestamp("fecha_reserva"); // Fecha Reserva
+            row[6] = rs.getString("estadoReserva"); // Estado
+
             model.addRow(row);
         }
 
         // Asignar el modelo a la tabla
-        TablaHabitacionReservacion.setModel(model);
+        TablaReservacion.setModel(model);
 
     } catch (SQLException e) {
         e.printStackTrace();
@@ -320,54 +336,52 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
     }
 }
 
-    private void cargarClientesEnTabla() {
-        String query = "SELECT idCliente, nombre, apellidoPaterno, apellidoMaterno, telefono, direccion FROM Cliente";
 
-        try (java.sql.Connection conn = Conexion.conectar();
-             java.sql.Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+private void cargarClientesEnTabla() {
+    String query = "SELECT idCliente, nombre, apellidoPaterno, apellidoMaterno, telefono, direccion FROM Cliente";
 
-            DefaultTableModel model = new DefaultTableModel();
-            model.setColumnIdentifiers(new String[]{
-                "ID", "Nombre", "Apellido Paterno", "Apellido Materno", "Teléfono", "Dirección"
+    try (java.sql.Connection conn = Conexion.conectar();
+         java.sql.Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(query)) {
+
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(new String[]{
+            "ID", "Nombre", "Apellido Paterno", "Apellido Materno", "Teléfono", "Dirección"
+        });
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getInt("idCliente"),
+                rs.getString("nombre"),
+                rs.getString("apellidoPaterno"),
+                rs.getString("apellidoMaterno"),
+                rs.getString("telefono"),
+                rs.getString("direccion")
             });
-
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    rs.getInt("idCliente"),
-                    rs.getString("nombre"),
-                    rs.getString("apellidoPaterno"),
-                    rs.getString("apellidoMaterno"),
-                    rs.getString("telefono"),
-                    rs.getString("direccion")
-                });
-            }
-
-            TableClientes.setModel(model);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al cargar los clientes: " + e.getMessage());
         }
+
+        TableClientes.setModel(model);
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al cargar los clientes: " + e.getMessage());
     }
-    
-    private void cargarEstadosReserva() {
+}
+
+private void cargarEstadosReserva() {
     String query = "SELECT estado FROM EstadoReserva";
 
     try (java.sql.Connection conn = Conexion.conectar();
          java.sql.PreparedStatement pst = conn.prepareStatement(query);
          ResultSet rs = pst.executeQuery()) {
 
-        // Limpiar ambos ComboBox antes de llenarlos
         ComboEstadoReserva.removeAllItems();
 
-        // Agregar cada estado a ambos ComboBox
         while (rs.next()) {
             String estado = rs.getString("estado");
             ComboEstadoReserva.addItem(estado);
         }
 
-        // Mostrar un mensaje si no se encontraron estados
         if (ComboEstadoReserva.getItemCount() == 0) {
             JOptionPane.showMessageDialog(this, "No se encontraron estados en la base de datos.");
         }
@@ -378,24 +392,19 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
     }
 }
 
+private void buscarHabitacionesDisponibles() {
+    java.util.Date fechaInicioDate = jDateChooserInicio.getDate();
+    java.util.Date fechaFinDate = jDateChooserFin.getDate();
 
-    private void buscarHabitacionesDisponibles() {
-    // Obtener las fechas desde los JTextField
-    String fechaInicioStr = txt_FechaInicioBuscar.getText().trim();
-    String fechaFinStr = txt_FechaFinBuscar.getText().trim();
-
-    // Validar que las fechas no estén vacías
-    if (fechaInicioStr.isEmpty() || fechaFinStr.isEmpty()) {
+    if (fechaInicioDate == null || fechaFinDate == null) {
         JOptionPane.showMessageDialog(this, "Por favor, ingrese ambas fechas para la búsqueda.");
         return;
     }
 
-    try {
-        // Convertir las fechas a java.sql.Date
-        Date fechaInicio = Date.valueOf(fechaInicioStr);
-        Date fechaFin = Date.valueOf(fechaFinStr);
+    java.sql.Date fechaInicio = new java.sql.Date(fechaInicioDate.getTime());
+    java.sql.Date fechaFin = new java.sql.Date(fechaFinDate.getTime());
 
-        // Consulta SQL para obtener habitaciones disponibles que no estén en mantenimiento
+    try {
         String query = "SELECT h.idHabitacion, th.tipo, eh.estado, h.precio, h.descripcion " +
                        "FROM Habitacion h " +
                        "JOIN TipoHabitacion th ON h.idTipoHabitacion = th.idTipoHabitacion " +
@@ -410,20 +419,16 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
         try (java.sql.Connection conn = Conexion.conectar();
              java.sql.PreparedStatement pst = conn.prepareStatement(query)) {
 
-            // Asignar parámetros a la consulta
             pst.setDate(1, fechaFin);
             pst.setDate(2, fechaInicio);
 
-            // Ejecutar la consulta
             ResultSet rs = pst.executeQuery();
 
-            // Crear el modelo para la tabla y establecer los nombres de las columnas
             DefaultTableModel model = new DefaultTableModel();
             model.setColumnIdentifiers(new String[]{
                 "No. Habitación", "Tipo", "Estado", "Precio", "Descripción"
             });
 
-            // Llenar el modelo con los resultados de la consulta
             while (rs.next()) {
                 model.addRow(new Object[]{
                     rs.getInt("idHabitacion"),
@@ -434,7 +439,6 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
                 });
             }
 
-            // Establecer el modelo en la tabla
             TableHabitacionesDisponibles.setModel(model);
 
         } catch (SQLException e) {
@@ -447,75 +451,94 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
     }
 }
 
-    private void cargarDatosReservaDesdeTabla() {
-    int filaSeleccionada = TablaHabitacionReservacion.getSelectedRow();
-
-    if (filaSeleccionada >= 0) {
-        txt_IdCliente.setText(TablaHabitacionReservacion.getValueAt(filaSeleccionada, 0).toString());
-        txt_inicioFecha.setText(TablaHabitacionReservacion.getValueAt(filaSeleccionada, 2).toString());
-        txt_finFecha.setText(TablaHabitacionReservacion.getValueAt(filaSeleccionada, 3).toString());
-        ComboEstadoReserva.setSelectedItem(TablaHabitacionReservacion.getValueAt(filaSeleccionada, 5).toString());
-    } 
-}
-
-    private void configurarEventosReservaciones() {
-    TablaHabitacionReservacion.getSelectionModel().addListSelectionListener(e -> {
-        if (!e.getValueIsAdjusting()) {
-            cargarDatosReservaDesdeTabla();
-        }
-    });
-}
-
-    
-    private void editarReservacion() {
-    int filaSeleccionada = TablaHabitacionReservacion.getSelectedRow();
+private void editarReservacion() {
+    int filaSeleccionada = TablaReservacion.getSelectedRow();
 
     if (filaSeleccionada < 0) {
         JOptionPane.showMessageDialog(this, "Por favor, seleccione una reservación para editar.");
         return;
     }
 
-    int idReserva = Integer.parseInt(TablaHabitacionReservacion.getValueAt(filaSeleccionada, 0).toString());
-    String idCliente = txt_IdCliente.getText().trim();
-    String fechaInicio = txt_inicioFecha.getText().trim();
-    String fechaFin = txt_finFecha.getText().trim();
-    String estadoReserva = ComboEstadoReserva.getSelectedItem().toString();
+    try {
+        // Obtener el ID de la reserva desde la tabla
+        int idReserva = Integer.parseInt(TablaReservacion.getValueAt(filaSeleccionada, 0).toString());
 
-    String query = "UPDATE Reserva SET idCliente = ?, fecha_inicio = ?, fecha_fin = ?, idEstadoReserva = " +
-                   "(SELECT idEstadoReserva FROM EstadoReserva WHERE estado = ?) WHERE idReserva = ?";
-
-    try (java.sql.Connection conn = Conexion.conectar();
-         java.sql.PreparedStatement pst = conn.prepareStatement(query)) {
-
-        pst.setInt(1, Integer.parseInt(idCliente));
-        pst.setDate(2, java.sql.Date.valueOf(fechaInicio));
-        pst.setDate(3, java.sql.Date.valueOf(fechaFin));
-        pst.setString(4, estadoReserva);
-        pst.setInt(5, idReserva);
-
-        int filasAfectadas = pst.executeUpdate();
-
-        if (filasAfectadas > 0) {
-            JOptionPane.showMessageDialog(this, "Reservación actualizada exitosamente.");
-        } else {
-            JOptionPane.showMessageDialog(this, "No se pudo actualizar la reservación.");
+        // Validar que el ID del cliente sea un número válido
+        String idCliente = txt_IdCliente.getText().trim();
+        if (idCliente.isEmpty() || !idCliente.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "El ID del cliente debe ser un número válido.");
+            return;
         }
+
+        // Obtener y validar las fechas desde los JDateChooser
+        java.util.Date fechaInicioDate = jDateChooserInicio.getDate();
+        java.util.Date fechaFinDate = jDateChooserFin.getDate();
+        if (fechaInicioDate == null || fechaFinDate == null) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione ambas fechas.");
+            return;
+        }
+        java.sql.Date fechaInicio = new java.sql.Date(fechaInicioDate.getTime());
+        java.sql.Date fechaFin = new java.sql.Date(fechaFinDate.getTime());
+
+        // Validar que el estado de la reserva esté seleccionado
+        String estadoReserva = (String) ComboEstadoReserva.getSelectedItem();
+        if (estadoReserva == null || estadoReserva.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un estado de reserva.");
+            return;
+        }
+
+        // Consulta de actualización
+        String query = "UPDATE Reserva SET idCliente = ?, fecha_inicio = ?, fecha_fin = ?, idEstadoReserva = " +
+                       "(SELECT idEstadoReserva FROM EstadoReserva WHERE estado = ?) WHERE idReserva = ?";
+
+        // Conexión y ejecución de la consulta
+        try (java.sql.Connection conn = Conexion.conectar();
+             java.sql.PreparedStatement pst = conn.prepareStatement(query)) {
+
+            // Asignar parámetros a la consulta
+            pst.setInt(1, Integer.parseInt(idCliente)); // ID del cliente
+            pst.setDate(2, fechaInicio);               // Fecha de inicio
+            pst.setDate(3, fechaFin);                  // Fecha de fin
+            pst.setString(4, estadoReserva);           // Estado de la reserva
+            pst.setInt(5, idReserva);                  // ID de la reserva
+
+            // Ejecutar la consulta
+            int filasAfectadas = pst.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                JOptionPane.showMessageDialog(this, "Reservación actualizada exitosamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo actualizar la reservación. Verifique los datos.");
+            }
+        }
+
     } catch (SQLException e) {
         e.printStackTrace();
         JOptionPane.showMessageDialog(this, "Error al actualizar la reservación: " + e.getMessage());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Error: El ID del cliente o la reserva no es válido.");
     }
 }
 
+
+
+
     private void crearReservacion() {
     String idCliente = txt_IdCliente.getText().trim();
-    String fechaInicio = txt_inicioFecha.getText().trim();
-    String fechaFin = txt_finFecha.getText().trim();
+
+    // Obtener las fechas desde los JDateChooser
+    java.util.Date fechaInicioDate = jDateChooserInicio.getDate();
+    java.util.Date fechaFinDate = jDateChooserFin.getDate();
+
     String estadoReserva = ComboEstadoReserva.getSelectedItem().toString();
 
-    if (idCliente.isEmpty() || fechaInicio.isEmpty() || fechaFin.isEmpty()) {
+    if (idCliente.isEmpty() || fechaInicioDate == null || fechaFinDate == null) {
         JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.");
         return;
     }
+
+    java.sql.Date fechaInicio = new java.sql.Date(fechaInicioDate.getTime());
+    java.sql.Date fechaFin = new java.sql.Date(fechaFinDate.getTime());
 
     String query = "INSERT INTO Reserva (idCliente, fecha_inicio, fecha_fin, idEstadoReserva) " +
                    "VALUES (?, ?, ?, (SELECT idEstadoReserva FROM EstadoReserva WHERE estado = ?))";
@@ -524,68 +547,40 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
          java.sql.PreparedStatement pst = conn.prepareStatement(query)) {
 
         pst.setInt(1, Integer.parseInt(idCliente));
-        pst.setDate(2, java.sql.Date.valueOf(fechaInicio));
-        pst.setDate(3, java.sql.Date.valueOf(fechaFin));
+        pst.setDate(2, fechaInicio);
+        pst.setDate(3, fechaFin);
         pst.setString(4, estadoReserva);
 
         int filasAfectadas = pst.executeUpdate();
 
         if (filasAfectadas > 0) {
             JOptionPane.showMessageDialog(this, "Reservación creada exitosamente.");
+            limpiarCamposReserva();
+            actualizarTablaReservaciones();
         } else {
             JOptionPane.showMessageDialog(this, "No se pudo crear la reservación.");
         }
     } catch (SQLException e) {
         e.printStackTrace();
         JOptionPane.showMessageDialog(this, "Error al crear la reservación: " + e.getMessage());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Error: El ID del cliente debe ser un número válido.");
     }
 }
 
-    private void cargarIdClienteDesdeTabla() {
-    int filaSeleccionada = TableClientes.getSelectedRow();
 
-    if (filaSeleccionada >= 0) {
-        txt_IdCliente.setText(TableClientes.getValueAt(filaSeleccionada, 0).toString());
-    } else {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione un cliente de la tabla.");
-    }
-}
-
-    private void configurarEventosClientes() {
-    TableClientes.getSelectionModel().addListSelectionListener(e -> {
-        if (!e.getValueIsAdjusting()) {
-            cargarIdClienteDesdeTabla();
-        }
-    });
-}
-
-    private void cargarIdsReservaYHabitacionDesdeTablas() {
-    int filaReservacion = TablaHabitacionReservacion.getSelectedRow();
-    int filaHabitacion = TableHabitacionesDisponibles.getSelectedRow();
-
-    if (filaReservacion >= 0 && filaHabitacion >= 0) {
-        txt_IdReserva2.setText(TablaHabitacionReservacion.getValueAt(filaReservacion, 0).toString());
-        txt_IdHabitacion2.setText(TableHabitacionesDisponibles.getValueAt(filaHabitacion, 0).toString());
-    }
-}
-
-    private void configurarEventosReservasYHabitaciones() {
-    TablaHabitacionReservacion.getSelectionModel().addListSelectionListener(e -> {
-        if (!e.getValueIsAdjusting()) {
-            cargarIdsReservaYHabitacionDesdeTablas();
-        }
-    });
-
-    TableHabitacionesDisponibles.getSelectionModel().addListSelectionListener(e -> {
-        if (!e.getValueIsAdjusting()) {
-            cargarIdsReservaYHabitacionDesdeTablas();
-        }
-    });
+// Método para limpiar los campos después de crear una reserva
+private void limpiarCamposReserva() {
+    txt_IdCliente.setText("");
+    jDateChooserInicio.setDate(null);
+    jDateChooserFin.setDate(null);
+    ComboEstadoReserva.setSelectedIndex(0);
 }
 
     private void actualizarTablaReservaciones() {
     cargarDatos();
 }
+    
     private void cargarReservaciones() {
     // Consulta SQL para obtener los datos de las reservas con sus habitaciones
     String query = "SELECT r.idReserva, c.nombre, c.apellidoPaterno, c.apellidoMaterno, " +
@@ -601,7 +596,7 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
          ResultSet rs = stmt.executeQuery(query)) {
 
         // Crear el modelo de la tabla
-        DefaultTableModel model = (DefaultTableModel) TablaReservaciones.getModel();
+        DefaultTableModel model = (DefaultTableModel) TablaHabitacionReservacion.getModel();
 
         // Limpiar las filas actuales (en caso de que haya datos previos)
         model.setRowCount(0);
@@ -623,49 +618,175 @@ public class InterReservaciones extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(null, "Error al cargar las reservaciones: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
+
+
     private void agregarHabitacionAReserva() {
-    // Obtener la fila seleccionada en TablaHabitacionReservacion
-    int filaReserva = TablaHabitacionReservacion.getSelectedRow();
-    if (filaReserva == -1) {
-        JOptionPane.showMessageDialog(null, "Por favor, selecciona una reserva.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    // Obtener los datos necesarios de los campos (idReserva y idHabitacion seleccionados)
+    String idReserva = txt_IdReserva.getText().trim();  // ID de la reserva (probablemente lo tengas en un campo de texto)
+    String idHabitacion = txt_IdHabitacion.getText().trim();  // ID de la habitación
+
+    if (idReserva.isEmpty() || idHabitacion.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
         return;
     }
-
-    // Obtener la fila seleccionada en TableHabitacionesDisponibles
-    int filaHabitacion = TableHabitacionesDisponibles.getSelectedRow();
-    if (filaHabitacion == -1) {
-        JOptionPane.showMessageDialog(null, "Por favor, selecciona una habitación disponible.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-
-    // Obtener el idReserva de la fila seleccionada en TablaHabitacionReservacion (asumiendo que está en la primera columna)
-    int idReserva = (int) TablaHabitacionReservacion.getValueAt(filaReserva, 0);
-
-    // Obtener el idHabitacion de la fila seleccionada en TableHabitacionesDisponibles (asumiendo que está en la primera columna)
-    int idHabitacion = (int) TableHabitacionesDisponibles.getValueAt(filaHabitacion, 0);
 
     // Consulta SQL para insertar en la tabla HabitacionReserva
     String query = "INSERT INTO HabitacionReserva (idReserva, idHabitacion) VALUES (?, ?)";
 
     try (java.sql.Connection conn = Conexion.conectar();
-         java.sql.PreparedStatement pstmt = conn.prepareStatement(query)) {
+         java.sql.PreparedStatement pst = conn.prepareStatement(query)) {
 
-        // Configurar los parámetros de la consulta
-        pstmt.setInt(1, idReserva);
-        pstmt.setInt(2, idHabitacion);
+        // Establecer los valores en la consulta preparada
+        pst.setInt(1, Integer.parseInt(idReserva));  // Asumiendo que idReserva es un número entero
+        pst.setInt(2, Integer.parseInt(idHabitacion));  // Asumiendo que idHabitacion es un número entero
 
-        // Ejecutar la consulta
-        int filasAfectadas = pstmt.executeUpdate();
-        if (filasAfectadas > 0) {
-            JOptionPane.showMessageDialog(null, "Habitación agregada a la reserva correctamente.");
+        // Ejecutar la inserción
+        int resultado = pst.executeUpdate();
+
+        if (resultado > 0) {
+            JOptionPane.showMessageDialog(this, "Habitación agregada a la reserva con éxito.");
         } else {
-            JOptionPane.showMessageDialog(null, "No se pudo agregar la habitación a la reserva.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No se pudo agregar la habitación.");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al agregar la habitación: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+    
+    private void cargarIdClienteDesdeTabla() {
+    int filaSeleccionada = TableClientes.getSelectedRow();
+
+    if (filaSeleccionada >= 0) {
+        Object idCliente = TableClientes.getValueAt(filaSeleccionada, 0);
+        if (idCliente != null) {
+            txt_IdCliente.setText(idCliente.toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "El ID del cliente está vacío.");
+        }
+    } 
+}
+
+private void cargarDatosReservaDesdeTabla() {
+    // Obtener la fila seleccionada en la tabla de reservaciones
+    int filaSeleccionada = TablaReservacion.getSelectedRow();
+
+    if (filaSeleccionada >= 0) {
+        try {
+            // Obtener los datos de la fila seleccionada
+            String idCliente = TablaReservacion.getValueAt(filaSeleccionada, 1).toString();
+            String fechaInicioStr = TablaReservacion.getValueAt(filaSeleccionada, 3).toString();
+            String fechaFinStr = TablaReservacion.getValueAt(filaSeleccionada, 4).toString();
+            String estadoReserva = TablaReservacion.getValueAt(filaSeleccionada, 6).toString();
+
+            // Cargar los datos en los componentes correspondientes
+            txt_IdCliente.setText(idCliente); // ID Cliente
+
+            // Convertir las fechas a java.util.Date y asignarlas a los JDateChooser
+            java.util.Date fechaInicio = java.sql.Date.valueOf(fechaInicioStr);
+            java.util.Date fechaFin = java.sql.Date.valueOf(fechaFinStr);
+            jDateChooserInicio.setDate(fechaInicio);
+            jDateChooserFin.setDate(fechaFin);
+
+            // Seleccionar el estado en el ComboBox
+            ComboEstadoReserva.setSelectedItem(estadoReserva);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar los datos de la reserva: " + e.getMessage());
+        }
+    
+    }
+}
+
+
+
+private void cargarIdsDesdeTablas() {
+    int filaReservaSeleccionada = TablaReservacion.getSelectedRow();
+    int filaHabitacionSeleccionada = TableHabitacionesDisponibles.getSelectedRow();
+
+    if (filaReservaSeleccionada >= 0) {
+        Object idReserva = TablaReservacion.getValueAt(filaReservaSeleccionada, 0);
+        if (idReserva != null) {
+            txt_IdReserva.setText(idReserva.toString());
+        }
+    } 
+
+    if (filaHabitacionSeleccionada >= 0) {
+        Object idHabitacion = TableHabitacionesDisponibles.getValueAt(filaHabitacionSeleccionada, 0);
+        if (idHabitacion != null) {
+            txt_IdHabitacion.setText(idHabitacion.toString());
+        }
+    
+    }
+}
+
+private void configurarEventos() {
+    TableClientes.getSelectionModel().addListSelectionListener(e -> {
+        if (!e.getValueIsAdjusting()) {
+            cargarIdClienteDesdeTabla();
+        }
+    });
+
+    TablaReservacion.getSelectionModel().addListSelectionListener(e -> {
+        if (!e.getValueIsAdjusting()) {
+            cargarDatosReservaDesdeTabla();
+            cargarIdsDesdeTablas();
+        }
+    });
+
+    TableHabitacionesDisponibles.getSelectionModel().addListSelectionListener(e -> {
+        if (!e.getValueIsAdjusting()) {
+            cargarIdsDesdeTablas();
+        }
+    });
+}
+
+private void borrarReserva() {
+    // Obtener la fila seleccionada en la tabla TablaReservacion
+    int filaSeleccionada = TablaReservacion.getSelectedRow();
+
+    if (filaSeleccionada < 0) {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una reserva para eliminar.");
+        return;
+    }
+
+    // Obtener el idReserva de la fila seleccionada
+    int idReserva = Integer.parseInt(TablaReservacion.getValueAt(filaSeleccionada, 0).toString());
+
+    // Confirmar la eliminación con el usuario
+    int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea eliminar esta reserva?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+    if (confirmacion != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    // Consulta SQL para eliminar registros en HabitacionReserva y Reserva
+    String deleteHabitacionReservaQuery = "DELETE FROM HabitacionReserva WHERE idReserva = ?";
+    String deleteReservaQuery = "DELETE FROM Reserva WHERE idReserva = ?";
+
+    try (java.sql.Connection conn = Conexion.conectar()) {
+        // Eliminar registros de HabitacionReserva
+        try (java.sql.PreparedStatement pstHabitacionReserva = conn.prepareStatement(deleteHabitacionReservaQuery)) {
+            pstHabitacionReserva.setInt(1, idReserva);
+            pstHabitacionReserva.executeUpdate();
+        }
+
+        // Eliminar registro de Reserva
+        try (java.sql.PreparedStatement pstReserva = conn.prepareStatement(deleteReservaQuery)) {
+            pstReserva.setInt(1, idReserva);
+            int filasAfectadas = pstReserva.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                JOptionPane.showMessageDialog(this, "Reserva eliminada exitosamente.");
+                cargarDatos(); // Método para actualizar la tabla TablaReservacion
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo eliminar la reserva.");
+            }
         }
 
     } catch (SQLException e) {
         e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al agregar la habitación a la reserva: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Error al eliminar la reserva: " + e.getMessage());
     }
 }
-
 }

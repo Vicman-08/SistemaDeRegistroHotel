@@ -1,7 +1,9 @@
 package vista;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JDesktopPane;
+import javax.swing.UIManager;
 /**
  *
  * @author Victor
@@ -39,10 +41,11 @@ public class FrmRecepcionista extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenuBar1 = new javax.swing.JMenuBar();
-        Reservacion = new javax.swing.JMenu();
         Cliente = new javax.swing.JMenu();
-        Cobro = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
+        Reservacion = new javax.swing.JMenu();
+        Servicios = new javax.swing.JMenu();
+        Factura = new javax.swing.JMenu();
+        Cerrar = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -51,17 +54,7 @@ public class FrmRecepcionista extends javax.swing.JFrame {
 
         jMenuBar1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
 
-        Reservacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/anadir.png"))); // NOI18N
-        Reservacion.setText("Reservacion");
-        Reservacion.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 14)); // NOI18N
-        Reservacion.setPreferredSize(new java.awt.Dimension(150, 50));
-        Reservacion.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ReservacionMouseClicked(evt);
-            }
-        });
-        jMenuBar1.add(Reservacion);
-
+        Cliente.setForeground(new java.awt.Color(255, 102, 0));
         Cliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cliente.png"))); // NOI18N
         Cliente.setText("Cliente");
         Cliente.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 14)); // NOI18N
@@ -73,24 +66,55 @@ public class FrmRecepcionista extends javax.swing.JFrame {
         });
         jMenuBar1.add(Cliente);
 
-        Cobro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/carrito.png"))); // NOI18N
-        Cobro.setText("Cobro");
-        Cobro.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 14)); // NOI18N
-        Cobro.setPreferredSize(new java.awt.Dimension(150, 50));
-        Cobro.addMouseListener(new java.awt.event.MouseAdapter() {
+        Reservacion.setForeground(new java.awt.Color(255, 102, 0));
+        Reservacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/anadir.png"))); // NOI18N
+        Reservacion.setText("Reservacion");
+        Reservacion.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 14)); // NOI18N
+        Reservacion.setPreferredSize(new java.awt.Dimension(150, 50));
+        Reservacion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                CobroMouseClicked(evt);
+                ReservacionMouseClicked(evt);
             }
         });
-        jMenuBar1.add(Cobro);
+        jMenuBar1.add(Reservacion);
 
-        jMenu6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cerrar-sesion.png"))); // NOI18N
-        jMenu6.setText("Cerrar sesion");
-        jMenu6.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 14)); // NOI18N
-        jMenu6.setPreferredSize(new java.awt.Dimension(150, 50));
-        jMenu6.addActionListener(new java.awt.event.ActionListener() {
+        Servicios.setForeground(new java.awt.Color(255, 102, 0));
+        Servicios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/carrito.png"))); // NOI18N
+        Servicios.setText("Servicios");
+        Servicios.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 14)); // NOI18N
+        Servicios.setPreferredSize(new java.awt.Dimension(150, 50));
+        Servicios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ServiciosMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(Servicios);
+
+        Factura.setForeground(new java.awt.Color(255, 102, 0));
+        Factura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/reportes.png"))); // NOI18N
+        Factura.setText("Factura");
+        Factura.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 14)); // NOI18N
+        Factura.setPreferredSize(new java.awt.Dimension(150, 50));
+        Factura.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                FacturaMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(Factura);
+
+        Cerrar.setForeground(new java.awt.Color(255, 102, 0));
+        Cerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cerrar-sesion.png"))); // NOI18N
+        Cerrar.setText("Cerrar sesion");
+        Cerrar.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 14)); // NOI18N
+        Cerrar.setPreferredSize(new java.awt.Dimension(150, 50));
+        Cerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CerrarMouseClicked(evt);
+            }
+        });
+        Cerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu6ActionPerformed(evt);
+                CerrarActionPerformed(evt);
             }
         });
 
@@ -100,9 +124,9 @@ public class FrmRecepcionista extends javax.swing.JFrame {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu6.add(jMenuItem1);
+        Cerrar.add(jMenuItem1);
 
-        jMenuBar1.add(jMenu6);
+        jMenuBar1.add(Cerrar);
 
         setJMenuBar(jMenuBar1);
 
@@ -110,11 +134,11 @@ public class FrmRecepcionista extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 756, Short.MAX_VALUE)
+            .addGap(0, 1014, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 251, Short.MAX_VALUE)
+            .addGap(0, 415, Short.MAX_VALUE)
         );
 
         pack();
@@ -123,27 +147,43 @@ public class FrmRecepcionista extends javax.swing.JFrame {
     private void ReservacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReservacionMouseClicked
         InterReservaciones interReservaciones = new InterReservaciones(); 
         abrirInternalFrame(interReservaciones); 
+        cambiarColoresJMenu(Reservacion);
     }//GEN-LAST:event_ReservacionMouseClicked
 
     private void ClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ClienteMouseClicked
         InterClientes interClientes = new InterClientes(); 
         abrirInternalFrame(interClientes);
+        cambiarColoresJMenu(Cliente);
     }//GEN-LAST:event_ClienteMouseClicked
 
-    private void CobroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CobroMouseClicked
+    private void ServiciosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ServiciosMouseClicked
         InterServicios interFacturas = new InterServicios(); 
-        abrirInternalFrame(interFacturas); 
-    }//GEN-LAST:event_CobroMouseClicked
+        abrirInternalFrame(interFacturas);
+        cambiarColoresJMenu(Servicios);
+    }//GEN-LAST:event_ServiciosMouseClicked
 
-    private void jMenu6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu6ActionPerformed
+    private void CerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarActionPerformed
     // TODO add your handling code here:
-    }//GEN-LAST:event_jMenu6ActionPerformed
+    }//GEN-LAST:event_CerrarActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
     FrmLogin login = new FrmLogin();
                     login.setVisible(true);
                     this.dispose();     // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void FacturaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FacturaMouseClicked
+        // TODO add your handling code here:
+        InterFactura interFactura = new InterFactura(); 
+        abrirInternalFrame(interFactura);
+        cambiarColoresJMenu(Factura);
+    }//GEN-LAST:event_FacturaMouseClicked
+
+    private void CerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CerrarMouseClicked
+        // TODO add your handling code here:
+        
+        cambiarColoresJMenu(Cerrar);
+    }//GEN-LAST:event_CerrarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -181,10 +221,11 @@ public class FrmRecepcionista extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu Cerrar;
     private javax.swing.JMenu Cliente;
-    private javax.swing.JMenu Cobro;
+    private javax.swing.JMenu Factura;
     private javax.swing.JMenu Reservacion;
-    private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu Servicios;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
@@ -195,5 +236,22 @@ public class FrmRecepcionista extends javax.swing.JFrame {
         jDesktopPane_Recepcionista.add(frame);
         frame.setVisible(true);
     }
+    private void cambiarColoresJMenu(javax.swing.JMenu menuSeleccionado) {
+        // Colores
+        Color colorSeleccionado = new Color(64, 64, 64); // Gris oscuro
+        Color colorPredeterminado = UIManager.getColor("Menu.background"); // Color predeterminado del menú
 
+        // Lista de menús
+        javax.swing.JMenu[] menus = {Cliente, Factura, Reservacion, Servicios, Cerrar};
+
+        for (javax.swing.JMenu menu : menus) {
+            if (menu == menuSeleccionado) {
+                menu.setBackground(colorSeleccionado);
+                menu.setOpaque(true); // Asegurarse de que se aplique el color
+            } else {
+                menu.setBackground(colorPredeterminado);
+                menu.setOpaque(false); // Volver al estilo predeterminado
+            }
+        }
+    }
 }

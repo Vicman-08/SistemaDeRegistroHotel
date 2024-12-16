@@ -1,7 +1,4 @@
 package vista;
-
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
 import conexion.Conexion;
 import java.awt.Dimension;
 import java.sql.ResultSet;
@@ -425,7 +422,7 @@ public class InterUser extends javax.swing.JInternalFrame {
 
     } 
 }
-
+    
     private void editarUsuario() {
     // Obtener los valores de los campos de texto y ComboBox
     String nombre = txt_nombre.getText().trim();
@@ -437,6 +434,26 @@ public class InterUser extends javax.swing.JInternalFrame {
     String tipoUsuarioSeleccionado = (String) ComboUsuario.getSelectedItem();
     String nuevaPassword = new String(txt_Contraseña.getPassword()).trim();
 
+    // Validar que nombre y apellidoPaterno contengan solo letras
+    if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
+        JOptionPane.showMessageDialog(this, "El nombre solo debe contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    if (!apellidoPaterno.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
+        JOptionPane.showMessageDialog(this, "El apellido paterno solo debe contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    if (!apellidoMaterno.isEmpty() && !apellidoMaterno.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
+        JOptionPane.showMessageDialog(this, "El apellido materno solo debe contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Validar que el teléfono contenga solo números
+    if (!telefono.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "El teléfono solo debe contener números.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
     // Obtener el ID del usuario seleccionado en la tabla
     int filaSeleccionada = tablaUsuarios.getSelectedRow();
     if (filaSeleccionada == -1) {
@@ -445,10 +462,9 @@ public class InterUser extends javax.swing.JInternalFrame {
     }
     int idUsuario = (int) tablaUsuarios.getValueAt(filaSeleccionada, 0); // Columna 0 es idUsuario
 
-    // Validar que no haya campos vacíos
-    if (nombre.isEmpty() || apellidoPaterno.isEmpty() || apellidoMaterno.isEmpty() ||
-        usuario.isEmpty() || telefono.isEmpty() || estadoSeleccionado == null || tipoUsuarioSeleccionado == null) {
-        JOptionPane.showMessageDialog(this, "Por favor, llena todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+    // Validar que no haya campos vacíos (excepto apellidoMaterno)
+    if (nombre.isEmpty() || apellidoPaterno.isEmpty() || usuario.isEmpty() || telefono.isEmpty() || estadoSeleccionado == null || tipoUsuarioSeleccionado == null) {
+        JOptionPane.showMessageDialog(this, "Por favor, llena todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
@@ -467,10 +483,8 @@ public class InterUser extends javax.swing.JInternalFrame {
     // Consulta SQL para actualizar con o sin contraseña
     String query;
     if (!nuevaPassword.isEmpty()) {
-        // Si se proporciona una nueva contraseña
         query = "UPDATE Usuario SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, usuario = ?, telefono = ?, idEstado = ?, idTipoUsuario = ?, password = ? WHERE idUsuario = ?";
     } else {
-        // Si no se proporciona una nueva contraseña
         query = "UPDATE Usuario SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, usuario = ?, telefono = ?, idEstado = ?, idTipoUsuario = ? WHERE idUsuario = ?";
     }
 
@@ -480,14 +494,14 @@ public class InterUser extends javax.swing.JInternalFrame {
         // Configurar los parámetros de la consulta
         pstmt.setString(1, nombre);
         pstmt.setString(2, apellidoPaterno);
-        pstmt.setString(3, apellidoMaterno);
+        pstmt.setString(3, apellidoMaterno.isEmpty() ? null : apellidoMaterno);
         pstmt.setString(4, usuario);
         pstmt.setString(5, telefono);
         pstmt.setInt(6, idEstado);
         pstmt.setInt(7, idTipoUsuario);
 
         if (!nuevaPassword.isEmpty()) {
-            pstmt.setString(8, nuevaPassword); // Nueva contraseña
+            pstmt.setString(8, nuevaPassword);
             pstmt.setInt(9, idUsuario);
         } else {
             pstmt.setInt(8, idUsuario);
@@ -507,7 +521,6 @@ public class InterUser extends javax.swing.JInternalFrame {
     }
 }
 
-    
     private int obtenerIdEstado(String estadoSeleccionado) throws SQLException {
     String query = "SELECT idEstado FROM Estado WHERE estado = ?";
     try (java.sql.Connection conn = Conexion.conectar();
@@ -547,14 +560,31 @@ public class InterUser extends javax.swing.JInternalFrame {
     String telefono = txt_Telefono.getText().trim();
     String estadoSeleccionado = (String) ComboEstado.getSelectedItem();
     String tipoUsuarioSeleccionado = (String) ComboUsuario.getSelectedItem();
-    
-    // Obtener la contraseña desde el JPasswordField
     String password = new String(txt_Contraseña.getPassword()).trim();
 
-    // Validar que no haya campos vacíos
-    if (nombre.isEmpty() || apellidoPaterno.isEmpty() || apellidoMaterno.isEmpty() ||
-        usuario.isEmpty() || telefono.isEmpty() || estadoSeleccionado == null || tipoUsuarioSeleccionado == null || password.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Por favor, llena todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+    // Validar que nombre y apellidoPaterno contengan solo letras
+    if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
+        JOptionPane.showMessageDialog(this, "El nombre solo debe contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    if (!apellidoPaterno.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
+        JOptionPane.showMessageDialog(this, "El apellido paterno solo debe contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    if (!apellidoMaterno.isEmpty() && !apellidoMaterno.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
+        JOptionPane.showMessageDialog(this, "El apellido materno solo debe contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Validar que el teléfono contenga solo números
+    if (!telefono.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "El teléfono solo debe contener números.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Validar que no haya campos vacíos (excepto apellidoMaterno)
+    if (nombre.isEmpty() || apellidoPaterno.isEmpty() || usuario.isEmpty() || telefono.isEmpty() || estadoSeleccionado == null || tipoUsuarioSeleccionado == null || password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, llena todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
@@ -563,8 +593,7 @@ public class InterUser extends javax.swing.JInternalFrame {
     int idTipoUsuario = obtenerIdTipoUsuario(tipoUsuarioSeleccionado);
 
     // Consulta SQL para insertar un nuevo usuario
-    String query = "INSERT INTO Usuario (nombre, apellidoPaterno, apellidoMaterno, usuario, password, telefono, idEstado, idTipoUsuario) " +
-                   "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    String query = "INSERT INTO Usuario (nombre, apellidoPaterno, apellidoMaterno, usuario, password, telefono, idEstado, idTipoUsuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     try (java.sql.Connection conn = Conexion.conectar();
          java.sql.PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -572,9 +601,9 @@ public class InterUser extends javax.swing.JInternalFrame {
         // Configurar los parámetros de la consulta
         pstmt.setString(1, nombre);
         pstmt.setString(2, apellidoPaterno);
-        pstmt.setString(3, apellidoMaterno);
+        pstmt.setString(3, apellidoMaterno.isEmpty() ? null : apellidoMaterno);
         pstmt.setString(4, usuario);
-        pstmt.setString(5, password); // Contraseña en texto claro
+        pstmt.setString(5, password);
         pstmt.setString(6, telefono);
         pstmt.setInt(7, idEstado);
         pstmt.setInt(8, idTipoUsuario);

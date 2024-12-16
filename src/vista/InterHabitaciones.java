@@ -1,13 +1,11 @@
 package vista;
 
-import com.mysql.jdbc.Connection;
 import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JComboBox;
 import conexion.Conexion;
 
 /**
@@ -25,7 +23,7 @@ public class InterHabitaciones extends javax.swing.JInternalFrame {
         cargarTiposHabitacionEnCombo();
         cargarEstadosHabitacionEnCombo();
         configurarEventos();
-        this.setSize(new Dimension(767, 470));
+        this.setSize(new Dimension(755, 470));
         this.setTitle("Habitaciones");
     }
 
@@ -76,10 +74,10 @@ public class InterHabitaciones extends javax.swing.JInternalFrame {
                 EditarActionPerformed(evt);
             }
         });
-        getContentPane().add(Editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 390, -1, -1));
+        getContentPane().add(Editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 350, -1, -1));
 
-        jLabel5.setText("Tipo de Habitacion");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, -1, -1));
+        jLabel5.setText("Tipo de Habitacion:");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, -1, -1));
 
         ComboTipoHabitacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         ComboTipoHabitacion.addActionListener(new java.awt.event.ActionListener() {
@@ -87,25 +85,25 @@ public class InterHabitaciones extends javax.swing.JInternalFrame {
                 ComboTipoHabitacionActionPerformed(evt);
             }
         });
-        getContentPane().add(ComboTipoHabitacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 110, -1));
+        getContentPane().add(ComboTipoHabitacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, 110, -1));
 
-        jLabel6.setText("Estado de Habitacion");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 270, -1, -1));
+        jLabel6.setText("Estado de Habitacion:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, -1, -1));
 
         ComboEstadoHabitacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(ComboEstadoHabitacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, 130, 20));
+        getContentPane().add(ComboEstadoHabitacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 130, 20));
 
-        jLabel7.setText("Precio");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 270, -1, -1));
+        jLabel7.setText("Precio:");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 270, -1, -1));
 
         txt_precio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(txt_precio, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 310, 100, -1));
+        getContentPane().add(txt_precio, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 300, 100, 30));
 
-        jLabel8.setText("Descripcion");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 270, -1, -1));
+        jLabel8.setText("Descripcion:");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 270, -1, -1));
 
         txt_Descripcion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(txt_Descripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 300, 170, 50));
+        getContentPane().add(txt_Descripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 300, 220, 30));
 
         Crear.setText("Crear");
         Crear.addActionListener(new java.awt.event.ActionListener() {
@@ -113,7 +111,7 @@ public class InterHabitaciones extends javax.swing.JInternalFrame {
                 CrearActionPerformed(evt);
             }
         });
-        getContentPane().add(Crear, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 390, -1, -1));
+        getContentPane().add(Crear, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 350, -1, -1));
 
         Limpiar.setText("Limpiar");
         Limpiar.addActionListener(new java.awt.event.ActionListener() {
@@ -121,7 +119,7 @@ public class InterHabitaciones extends javax.swing.JInternalFrame {
                 LimpiarActionPerformed(evt);
             }
         });
-        getContentPane().add(Limpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 390, -1, -1));
+        getContentPane().add(Limpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 350, -1, -1));
 
         Actualizar.setText("Actualizar Tabla");
         Actualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -129,7 +127,7 @@ public class InterHabitaciones extends javax.swing.JInternalFrame {
                 ActualizarActionPerformed(evt);
             }
         });
-        getContentPane().add(Actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 390, -1, -1));
+        getContentPane().add(Actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 350, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

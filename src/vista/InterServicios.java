@@ -1,16 +1,10 @@
 package vista;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
 import conexion.Conexion;
 import java.awt.Dimension;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -26,7 +20,7 @@ public class InterServicios extends javax.swing.JInternalFrame {
         cargarReservaciones();
         cargarServiciosEnTabla();
         this.setSize(new Dimension(1061, 411));
-        this.setTitle("Reservaciones");
+        this.setTitle("Servicios");
     }
 
     /**
@@ -55,13 +49,13 @@ public class InterServicios extends javax.swing.JInternalFrame {
 
         TablaReservaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID Reserva", "Cliente", "Fecha Inicio", "Fecha Fin", "Fecha Reserva", "Habitaciones"
+                "ID Reserva", "Cliente", "Fecha Inicio", "Fecha Fin", "Habitaciones"
             }
         ));
         TablaReservaciones.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -121,8 +115,10 @@ public class InterServicios extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel6.setText("Servicios:");
 
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel7.setText("Reservas:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -147,12 +143,12 @@ public class InterServicios extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txt_Descripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1)
-                                    .addComponent(jButton2)))
+                                .addComponent(jButton1))
                             .addComponent(jLabel3))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(451, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -182,15 +178,15 @@ public class InterServicios extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txt_Descripcion)
+                        .addComponent(jButton2)
+                        .addComponent(jButton1))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txt_IdReserva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txt_Precio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txt_Descripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton2))
-                    .addComponent(jButton1))
-                .addContainerGap(35, Short.MAX_VALUE))
+                        .addComponent(txt_Precio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         pack();
@@ -206,10 +202,12 @@ public class InterServicios extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.editarServicio();
+        this.limpiarCamposCrearServicio();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.crearServicio();
+        this.limpiarCamposCrearServicio();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void TablaServiciosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaServiciosMouseClicked
@@ -239,29 +237,37 @@ public class InterServicios extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
     private void cargarReservaciones() {
     // Consulta SQL para obtener los datos de las reservas con sus habitaciones
-    String query = "SELECT r.idReserva, c.nombre, c.apellidoPaterno, c.apellidoMaterno, " +
-                   "r.fecha_inicio, r.fecha_fin, GROUP_CONCAT(h.idHabitacion SEPARATOR ', ') AS habitaciones " +
+    String query = "SELECT r.idReserva, " +
+                   "CONCAT(c.nombre, ' ', c.apellidoPaterno, ' ', IFNULL(c.apellidoMaterno, '')) AS cliente, " +
+                   "r.fecha_inicio, r.fecha_fin, " +
+                   "GROUP_CONCAT(h.idHabitacion SEPARATOR ', ') AS habitaciones " +
                    "FROM Reserva r " +
                    "JOIN Cliente c ON r.idCliente = c.idCliente " +
                    "JOIN HabitacionReserva hr ON r.idReserva = hr.idReserva " +
                    "JOIN Habitacion h ON hr.idHabitacion = h.idHabitacion " +
-                   "GROUP BY r.idReserva, c.nombre, c.apellidoPaterno, c.apellidoMaterno, r.fecha_inicio, r.fecha_fin";
+                   "GROUP BY r.idReserva, c.idCliente, c.nombre, c.apellidoPaterno, c.apellidoMaterno, r.fecha_inicio, r.fecha_fin";
 
     try (java.sql.Connection conn = Conexion.conectar();
          java.sql.Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(query)) {
 
         // Crear el modelo de la tabla
-        DefaultTableModel model = (DefaultTableModel) TablaReservaciones.getModel();
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(new Object[] {
+            "ID Reserva", "Cliente", "Fecha Inicio", "Fecha Fin", "Habitaciones"
+        });
+
+        // Asignar el modelo a la tabla
+        TablaReservaciones.setModel(model);
 
         // Limpiar las filas actuales (en caso de que haya datos previos)
         model.setRowCount(0);
 
-        // Llenar el modelo con los datos del ResultSet
+        // Llenar el modelo con los datos obtenidos de la consulta
         while (rs.next()) {
-            Object[] row = new Object[6];
+            Object[] row = new Object[5];
             row[0] = rs.getInt("idReserva");
-            row[1] = rs.getString("nombre") + " " + rs.getString("apellidoPaterno") + " " + rs.getString("apellidoMaterno");
+            row[1] = rs.getString("cliente");
             row[2] = rs.getDate("fecha_inicio");
             row[3] = rs.getDate("fecha_fin");
             row[4] = rs.getString("habitaciones"); // Lista de habitaciones asociadas
@@ -274,7 +280,7 @@ public class InterServicios extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(null, "Error al cargar las reservaciones: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
-    
+
    private void cargarServiciosEnTabla() {
     // Crear el modelo de la tabla
     DefaultTableModel modelo = new DefaultTableModel();
@@ -283,18 +289,17 @@ public class InterServicios extends javax.swing.JInternalFrame {
     // Asignar el modelo a la tabla
     TablaServicios.setModel(modelo);
 
-    // Consulta SQL para obtener los datos de los servicios con el nombre del cliente, ID de reserva y habitaciones asociadas
+    // Consulta SQL para obtener los datos de los servicios
     String query = "SELECT s.idServicio, r.idReserva, " +
                    "CONCAT(c.nombre, ' ', c.apellidoPaterno, ' ', IFNULL(c.apellidoMaterno, '')) AS cliente, " +
                    "GROUP_CONCAT(h.idHabitacion SEPARATOR ', ') AS habitaciones, " +
-                   "s.descripcion, " +
-                   "s.precio " +
+                   "s.descripcion, s.precio " +
                    "FROM Servicio s " +
                    "JOIN Reserva r ON s.idReserva = r.idReserva " +
                    "JOIN Cliente c ON r.idCliente = c.idCliente " +
                    "JOIN HabitacionReserva hr ON r.idReserva = hr.idReserva " +
                    "JOIN Habitacion h ON hr.idHabitacion = h.idHabitacion " +
-                   "GROUP BY s.idServicio, r.idReserva, c.nombre, c.apellidoPaterno, c.apellidoMaterno, s.descripcion, s.precio";
+                   "GROUP BY s.idServicio, r.idReserva, c.idCliente, c.nombre, c.apellidoPaterno, c.apellidoMaterno, s.descripcion, s.precio";
 
     try (java.sql.Connection conn = Conexion.conectar();
          java.sql.Statement stmt = conn.createStatement();
@@ -305,9 +310,9 @@ public class InterServicios extends javax.swing.JInternalFrame {
 
         // Llenar el modelo con los datos obtenidos de la consulta
         while (rs.next()) {
-            Object[] fila = new Object[]{
+            Object[] fila = new Object[] {
                 rs.getInt("idServicio"),
-                rs.getInt("idReserva"),       // Agregar el ID de la reserva
+                rs.getInt("idReserva"),
                 rs.getString("cliente"),
                 rs.getString("habitaciones"),
                 rs.getString("descripcion"),
@@ -321,6 +326,7 @@ public class InterServicios extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(this, "Error al cargar los servicios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
+
 
 
     private void cargarDatosServicioDesdeTabla() {
@@ -348,23 +354,19 @@ public class InterServicios extends javax.swing.JInternalFrame {
     }
 
     private void crearServicio() {
-    // Obtener los valores de los JTextField
     String idReservaStr = txt_IdReserva.getText().trim();
     String descripcion = txt_Descripcion.getText().trim();
     String precioStr = txt_Precio.getText().trim();
 
-    // Validar que los campos no estén vacíos
     if (idReservaStr.isEmpty() || descripcion.isEmpty() || precioStr.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.");
         return;
     }
 
     try {
-        // Convertir idReserva y precio a sus tipos adecuados
         int idReserva = Integer.parseInt(idReservaStr);
         double precio = Double.parseDouble(precioStr);
 
-        // Consulta SQL para insertar el servicio
         String insertQuery = "INSERT INTO Servicio (idReserva, descripcion, precio) VALUES (?, ?, ?)";
 
         try (java.sql.Connection conn = Conexion.conectar();
@@ -393,6 +395,7 @@ public class InterServicios extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(this, "El ID de la reserva y el precio deben ser números válidos.");
     }
 }
+
 
     
     private void editarServicio() {

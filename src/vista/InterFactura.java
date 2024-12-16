@@ -2,27 +2,23 @@ package vista;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import conexion.Conexion;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.sql.*;
-import java.util.Properties;
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.sql.*;
+import java.util.ArrayList;
 import java.util.Properties;
 import javax.swing.JOptionPane;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import java.util.List;
+import java.util.ArrayList;
+
 
 /**
  *
@@ -35,9 +31,9 @@ public class InterFactura extends javax.swing.JInternalFrame {
      */
     public InterFactura() {
         initComponents();
-        cargarReservasEnTabla();
+        cargarReservaciones();
         cargarFacturasEnTabla();
-        this.setSize(new Dimension(944, 265));
+        this.setSize(new Dimension(1157, 650));
         this.setTitle("Factura");
     }
 
@@ -56,8 +52,10 @@ public class InterFactura extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaFacturas = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
-        Factura.setText("Generar Factura");
+        Factura.setText("Enviar Factura");
         Factura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 FacturaActionPerformed(evt);
@@ -75,6 +73,7 @@ public class InterFactura extends javax.swing.JInternalFrame {
                 "ID HabitacionReserva", "Cliente", "Fecha Inicio", "Fecha Fin", "Fecha Reserva", "Habitaciones"
             }
         ));
+        TablaReservaciones.setPreferredSize(new java.awt.Dimension(250, 80));
         jScrollPane4.setViewportView(TablaReservaciones);
 
         TablaFacturas.setModel(new javax.swing.table.DefaultTableModel(
@@ -88,44 +87,60 @@ public class InterFactura extends javax.swing.JInternalFrame {
                 "ID Factura", "Cliente", "Fecha Emision", "Habitaciones", "Total Habitaciones", "Total Servicios", "Total"
             }
         ));
+        TablaFacturas.setPreferredSize(new java.awt.Dimension(250, 80));
         jScrollPane1.setViewportView(TablaFacturas);
 
-        jButton1.setText("Crear Factura");
+        jButton1.setText("Pagar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setText("Reservaciones:");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel2.setText("Facturas:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 22, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(163, 163, 163)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Factura)
-                .addGap(201, 201, 201))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Factura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(Factura))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(32, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(190, 190, 190)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Factura)
+                .addGap(144, 144, 144))
         );
 
         pack();
@@ -136,7 +151,8 @@ public class InterFactura extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_FacturaActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.crearFactura();
+        this.generarFactura();
+        cargarFacturasEnTabla();
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
@@ -145,13 +161,12 @@ public class InterFactura extends javax.swing.JInternalFrame {
     private javax.swing.JTable TablaFacturas;
     private javax.swing.JTable TablaReservaciones;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane4;
     // End of variables declaration//GEN-END:variables
-
-
 public void generarFacturaDesdeTabla() {
-    // Obtener la fila seleccionada
     int filaSeleccionada = TablaFacturas.getSelectedRow();
 
     if (filaSeleccionada < 0) {
@@ -159,103 +174,50 @@ public void generarFacturaDesdeTabla() {
         return;
     }
 
-    // Obtener el idFactura de la fila seleccionada
     int idFactura = Integer.parseInt(TablaFacturas.getValueAt(filaSeleccionada, 0).toString());
     String rutaCarpeta = "C:\\Users\\Victor\\Documents\\Proyecto final TA\\PDF BDHotel";
     String fileName = rutaCarpeta + "\\Factura_" + idFactura + ".pdf";
 
-    // Consulta SQL para obtener los datos de la factura seleccionada
-    String query = "SELECT f.idFactura, f.fecha_emision, f.total_habitacion, f.total_servicios, f.total, " +
-                   "c.nombre, c.apellidoPaterno, c.apellidoMaterno, " +
-                   "GROUP_CONCAT(h.idHabitacion SEPARATOR ', ') AS habitaciones " +
-                   "FROM Factura f " +
-                   "JOIN HabitacionReserva hr ON f.idHabitacionReserva = hr.idHabitacionReserva " +
-                   "JOIN Reserva r ON hr.idReserva = r.idReserva " +
-                   "JOIN Cliente c ON r.idCliente = c.idCliente " +
-                   "JOIN Habitacion h ON hr.idHabitacion = h.idHabitacion " +
-                   "WHERE f.idFactura = ? " +
-                   "GROUP BY f.idFactura";
+    try (Connection conn = Conexion.conectar()) {
+        // Consulta para obtener datos principales de la factura
+        String queryFactura = "SELECT f.idFactura, f.fecha_emision, f.total_habitacion, f.total_servicios, f.total, " +
+                              "c.correo, CONCAT(c.nombre, ' ', c.apellidoPaterno, ' ', IFNULL(c.apellidoMaterno, '')) AS cliente " +
+                              "FROM Factura f " +
+                              "JOIN Reserva r ON f.idReserva = r.idReserva " +
+                              "JOIN Cliente c ON r.idCliente = c.idCliente " +
+                              "WHERE f.idFactura = ?";
 
-    try (Connection conn = Conexion.conectar();
-         PreparedStatement pst = conn.prepareStatement(query)) {
+        PreparedStatement pstFactura = conn.prepareStatement(queryFactura);
+        pstFactura.setInt(1, idFactura);
+        ResultSet rsFactura = pstFactura.executeQuery();
 
-        pst.setInt(1, idFactura);
-        ResultSet rs = pst.executeQuery();
+        if (rsFactura.next()) {
+            String correoDestino = rsFactura.getString("correo").trim();
 
-        if (rs.next()) {
-            // Crear la carpeta si no existe
-            File carpeta = new File(rutaCarpeta);
-            if (!carpeta.exists()) {
-                carpeta.mkdirs();
-            }
-
-            // Crear el documento PDF
-            Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(fileName));
-            document.open();
-
-            // Título
-            Paragraph title = new Paragraph("Factura #" + idFactura, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18));
-            title.setAlignment(Element.ALIGN_CENTER);
-            document.add(title);
-            document.add(new Paragraph(" "));
-
-            // Información del cliente
-            document.add(new Paragraph("Cliente: " + rs.getString("nombre") + " " +
-                                       rs.getString("apellidoPaterno") + " " +
-                                       rs.getString("apellidoMaterno")));
-            document.add(new Paragraph("Fecha de emisión: " + rs.getTimestamp("fecha_emision").toString()));
-            document.add(new Paragraph("Habitaciones: " + rs.getString("habitaciones")));
-            document.add(new Paragraph(" "));
-
-            // Detalles de la factura
-            PdfPTable table = new PdfPTable(2);
-            table.setWidthPercentage(100);
-            table.setSpacingBefore(10f);
-
-            table.addCell("Total Habitación:");
-            table.addCell("$" + rs.getDouble("total_habitacion"));
-
-            table.addCell("Total Servicios:");
-            table.addCell("$" + rs.getDouble("total_servicios"));
-
-            table.addCell("Total a Pagar:");
-            table.addCell("$" + rs.getDouble("total"));
-
-            document.add(table);
-
-            // Cerrar el documento
-            document.close();
-
-            JOptionPane.showMessageDialog(this, "Factura generada correctamente: " + fileName);
-
-            // Abrir el PDF automáticamente
-            File pdfFile = new File(fileName);
-            if (pdfFile.exists()) {
-                Desktop.getDesktop().open(pdfFile);
-            } else {
-                JOptionPane.showMessageDialog(this, "El archivo PDF no se encontró.");
+            // Verificar si el archivo existe antes de enviarlo
+            File archivo = new File(fileName);
+            if (!archivo.exists()) {
+                JOptionPane.showMessageDialog(this, "El archivo PDF no se encuentra en la ruta especificada: " + fileName, "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Enviar el correo a una dirección fija
-            String emailDestino = "vicman08hvx@gmail.com";  // Correo del destinatario fijo
-            enviarCorreoConAdjunto(emailDestino, fileName);
-
+            // Enviar el correo con el archivo adjunto
+            enviarCorreoConAdjunto(correoDestino, fileName);
         } else {
             JOptionPane.showMessageDialog(this, "No se encontró la factura seleccionada.");
         }
-
     } catch (Exception e) {
         e.printStackTrace();
         JOptionPane.showMessageDialog(this, "Error al generar la factura: " + e.getMessage());
     }
 }
 
-private void enviarCorreoConAdjunto(String emailDestino, String filePath) {
+
+
+    private void enviarCorreoConAdjunto(String emailDestino, String filePath) {
     // Configuración del servidor SMTP (usando Gmail como ejemplo)
-    final String remitente = "22161075@itoaxaca.edu.mx"; // Cambia por tu correo
-    final String password = "*******";            // Cambia por tu contraseña o token de aplicación
+    final String remitente = "sistemahotelprueba@gmail.com"; // Tu correo
+    final String password = "qjqioxbqlpcdlmso"; // Contraseña de aplicación
 
     // Configuración de propiedades
     Properties props = new Properties();
@@ -271,6 +233,9 @@ private void enviarCorreoConAdjunto(String emailDestino, String filePath) {
         }
     });
 
+    // Habilitar la depuración de SMTP (opcional para verificar errores)
+    session.setDebug(true);
+
     try {
         // Crear el mensaje
         Message message = new MimeMessage(session);
@@ -280,7 +245,14 @@ private void enviarCorreoConAdjunto(String emailDestino, String filePath) {
 
         // Cuerpo del mensaje
         MimeBodyPart mensajeTexto = new MimeBodyPart();
-        mensajeTexto.setText("Adjunto encontrará su factura en formato PDF.");
+        mensajeTexto.setText("Estimado/a huésped,\n\n" +
+        "Esperamos que haya disfrutado de su estancia con nosotros y que haya tenido una experiencia relajante y placentera.\n\n" +
+        "Adjunto encontrará su factura en formato PDF con los detalles correspondientes a su estancia.\n\n" +
+        "Si tiene alguna pregunta o necesita asistencia adicional, no dude en contactarnos.\n\n" +
+        "Atentamente,\n" +
+        "El equipo de Hotel El Dormilon");
+
+
 
         // Adjuntar el archivo PDF
         MimeBodyPart adjunto = new MimeBodyPart();
@@ -297,18 +269,227 @@ private void enviarCorreoConAdjunto(String emailDestino, String filePath) {
 
         // Enviar el correo
         Transport.send(message);
+
         JOptionPane.showMessageDialog(this, "Correo enviado exitosamente a: " + emailDestino);
 
     } catch (MessagingException e) {
         e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al enviar el correo: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, "Error al enviar el correo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+    
+    private void generarFactura() {
+    int filaSeleccionada = TablaReservaciones.getSelectedRow();
+
+    if (filaSeleccionada < 0) {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una reservación de la tabla.");
+        return;
+    }
+
+    int idReserva = Integer.parseInt(TablaReservaciones.getValueAt(filaSeleccionada, 0).toString());
+
+    String cliente = "";
+    String correo = "";
+    double totalHabitacion = 0;
+    double totalServicios = 0;
+    double total = 0;
+
+    List<String[]> habitacionesList = new ArrayList<>();
+    List<String[]> serviciosList = new ArrayList<>();
+
+    try (Connection conn = Conexion.conectar()) {
+        // Consulta para obtener los datos del cliente y habitaciones
+        String reservaQuery = "SELECT CONCAT(c.nombre, ' ', c.apellidoPaterno, ' ', IFNULL(c.apellidoMaterno, '')) AS cliente, " +
+                              "c.correo, h.idHabitacion, h.precio " +
+                              "FROM Reserva r " +
+                              "JOIN Cliente c ON r.idCliente = c.idCliente " +
+                              "JOIN HabitacionReserva hr ON r.idReserva = hr.idReserva " +
+                              "JOIN Habitacion h ON hr.idHabitacion = h.idHabitacion " +
+                              "WHERE r.idReserva = ?";
+
+        try (PreparedStatement pstReserva = conn.prepareStatement(reservaQuery)) {
+            pstReserva.setInt(1, idReserva);
+            ResultSet rsReserva = pstReserva.executeQuery();
+
+            while (rsReserva.next()) {
+                if (cliente.isEmpty()) {
+                    cliente = rsReserva.getString("cliente");
+                    correo = rsReserva.getString("correo");
+                }
+                habitacionesList.add(new String[]{
+                    rsReserva.getString("idHabitacion"),
+                    String.valueOf(rsReserva.getDouble("precio"))
+                });
+                totalHabitacion += rsReserva.getDouble("precio");
+            }
+        }
+
+        // Consulta para obtener los servicios asociados a la reserva
+        String serviciosQuery = "SELECT s.descripcion, s.precio FROM Servicio s WHERE s.idReserva = ?";
+        try (PreparedStatement pstServicios = conn.prepareStatement(serviciosQuery)) {
+            pstServicios.setInt(1, idReserva);
+            ResultSet rsServicios = pstServicios.executeQuery();
+            while (rsServicios.next()) {
+                serviciosList.add(new String[]{
+                    rsServicios.getString("descripcion"),
+                    String.valueOf(rsServicios.getDouble("precio"))
+                });
+                totalServicios += rsServicios.getDouble("precio");
+            }
+        }
+
+        total = totalHabitacion + totalServicios;
+        
+        // Insertar la factura en la base de datos
+String insertFacturaQuery = "INSERT INTO Factura (idReserva, fecha_emision, total_habitacion, total_servicios, total) " +
+                            "VALUES (?, CURRENT_TIMESTAMP, ?, ?, ?)";
+
+try (PreparedStatement pstInsertFactura = conn.prepareStatement(insertFacturaQuery, Statement.RETURN_GENERATED_KEYS)) {
+    pstInsertFactura.setInt(1, idReserva);
+    pstInsertFactura.setDouble(2, totalHabitacion);
+    pstInsertFactura.setDouble(3, totalServicios);
+    pstInsertFactura.setDouble(4, total);
+
+    int filasAfectadas = pstInsertFactura.executeUpdate();
+
+    if (filasAfectadas > 0) {
+        ResultSet generatedKeys = pstInsertFactura.getGeneratedKeys();
+        if (generatedKeys.next()) {
+            int idFactura = generatedKeys.getInt(1);
+            JOptionPane.showMessageDialog(this, "Factura #" + idFactura + " registrada exitosamente en la base de datos.");
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "No se pudo registrar la factura en la base de datos.");
     }
 }
 
 
+        // Pedir método de pago
+        String[] opcionesPago = {"Efectivo", "Tarjeta de Crédito"};
+        String metodoPago = (String) JOptionPane.showInputDialog(this, "Seleccione el método de pago:", "Método de Pago",
+                JOptionPane.QUESTION_MESSAGE, null, opcionesPago, opcionesPago[0]);
+
+        String detallesPago = "";
+
+        if ("Efectivo".equals(metodoPago)) {
+            boolean entradaValida = false;
+            double pagoCliente = 0;
+            while (!entradaValida) {
+                try {
+                    String pagoStr = JOptionPane.showInputDialog(this, "Ingrese la cantidad con la que paga el cliente:");
+                    if (pagoStr == null) return;
+                    pagoCliente = Double.parseDouble(pagoStr);
+                    if (pagoCliente >= total) {
+                        double cambio = pagoCliente - total;
+                        detallesPago = "Método de Pago: Efectivo\n" +
+                                       "Pago del Cliente: $" + pagoCliente + "\n" +
+                                       "Cambio: $" + cambio;
+                        entradaValida = true;
+                    } else {
+                        JOptionPane.showMessageDialog(this, "La cantidad ingresada es insuficiente.");
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Entrada inválida. Por favor, ingrese un número válido.");
+                }
+            }
+        } else if ("Tarjeta de Crédito".equals(metodoPago)) {
+            boolean entradaValida = false;
+            while (!entradaValida) {
+                try {
+                    String numeroTarjeta = JOptionPane.showInputDialog(this, "Ingrese el número de tarjeta (16 dígitos):");
+                    if (numeroTarjeta == null) return;
+                    if (!numeroTarjeta.matches("\\d{16}")) throw new Exception("Número de tarjeta inválido.");
+
+                    String nombreTarjeta = JOptionPane.showInputDialog(this, "Ingrese el nombre en la tarjeta:");
+                    if (nombreTarjeta == null) return;
+
+                    String mesExpiracion = JOptionPane.showInputDialog(this, "Ingrese el mes de expiración (01-12):");
+                    if (mesExpiracion == null) return;
+                    int mes = Integer.parseInt(mesExpiracion);
+                    if (mes < 1 || mes > 12) throw new Exception("Mes de expiración inválido.");
+
+                    String anioExpiracion = JOptionPane.showInputDialog(this, "Ingrese el año de expiración (mayor o igual a 2024):");
+                    if (anioExpiracion == null) return;
+                    int anio = Integer.parseInt(anioExpiracion);
+                    if (anio < 2024) throw new Exception("Año de expiración inválido.");
+
+                    String cvc = JOptionPane.showInputDialog(this, "Ingrese el CVC (3 dígitos):");
+                    if (cvc == null) return;
+                    if (!cvc.matches("\\d{3}")) throw new Exception("CVC inválido.");
+
+                    detallesPago = "Método de Pago: Tarjeta de Crédito\n" +
+                                   "Número de Tarjeta: **** **** **** " + numeroTarjeta.substring(12) + "\n" +
+                                   "Nombre en la Tarjeta: " + nombreTarjeta + "\n" +
+                                   "Expiración: " + mesExpiracion + "/" + anioExpiracion;
+                    entradaValida = true;
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, e.getMessage());
+                }
+            }
+        }
+
+        // Generar el PDF
+        String rutaCarpeta = "C:\\Users\\Victor\\Documents\\Proyecto final TA\\PDF BDHotel";
+        String fileName = rutaCarpeta + "\\Factura_" + idReserva + ".pdf";
+
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(fileName));
+        document.open();
+
+        document.add(new Paragraph("Factura de Reserva #" + idReserva, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18)));
+        document.add(new Paragraph("Cliente: " + cliente));
+        document.add(new Paragraph("Correo: " + correo));
+        document.add(new Paragraph("Fecha de emisión: " + new Timestamp(System.currentTimeMillis()).toString()));
+        document.add(new Paragraph("\n"));
+
+        // Tabla de habitaciones
+        document.add(new Paragraph("Habitaciones:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+        PdfPTable tablaHabitaciones = new PdfPTable(2);
+        tablaHabitaciones.addCell("No. Habitación");
+        tablaHabitaciones.addCell("Precio");
+        for (String[] habitacion : habitacionesList) {
+            tablaHabitaciones.addCell(habitacion[0]);
+            tablaHabitaciones.addCell("$" + habitacion[1]);
+        }
+        document.add(tablaHabitaciones);
+        document.add(new Paragraph("\n"));
+
+        // Tabla de servicios
+        document.add(new Paragraph("Servicios:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+        PdfPTable tablaServicios = new PdfPTable(2);
+        tablaServicios.addCell("Descripción");
+        tablaServicios.addCell("Precio");
+        for (String[] servicio : serviciosList) {
+            tablaServicios.addCell(servicio[0]);
+            tablaServicios.addCell("$" + servicio[1]);
+        }
+        document.add(tablaServicios);
+        document.add(new Paragraph("\n"));
+
+        document.add(new Paragraph("Total Habitación: $" + totalHabitacion));
+        document.add(new Paragraph("Total Servicios: $" + totalServicios));
+        document.add(new Paragraph("Total a Pagar: $" + total));
+        document.add(new Paragraph("\n" + detallesPago));
+
+        document.close();
+
+        JOptionPane.showMessageDialog(this, "Factura generada exitosamente en: " + fileName);
+
+        // Abrir el PDF
+        File pdfFile = new File(fileName);
+        if (pdfFile.exists()) {
+            Desktop.getDesktop().open(pdfFile);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al generar la factura: " + e.getMessage());
+    }
+}
 
 
-private void cargarFacturasEnTabla() {
+    //-----------------------------------------------
+    private void cargarFacturasEnTabla() {
     // Crear el modelo de la tabla
     DefaultTableModel modelo = new DefaultTableModel();
     modelo.setColumnIdentifiers(new Object[]{
@@ -319,14 +500,14 @@ private void cargarFacturasEnTabla() {
     // Asignar el modelo a la tabla
     TablaFacturas.setModel(modelo);
 
-    // Consulta SQL para obtener los datos de las facturas con el nombre completo del cliente y habitaciones
+    // Consulta SQL para obtener los datos de las facturas
     String query = "SELECT f.idFactura, f.fecha_emision, f.total_habitacion, f.total_servicios, f.total, " +
                    "CONCAT(c.nombre, ' ', c.apellidoPaterno, ' ', IFNULL(c.apellidoMaterno, '')) AS cliente, " +
                    "GROUP_CONCAT(h.idHabitacion SEPARATOR ', ') AS habitaciones " +
                    "FROM Factura f " +
-                   "JOIN HabitacionReserva hr ON f.idHabitacionReserva = hr.idHabitacionReserva " +
-                   "JOIN Reserva r ON hr.idReserva = r.idReserva " +
+                   "JOIN Reserva r ON f.idReserva = r.idReserva " +
                    "JOIN Cliente c ON r.idCliente = c.idCliente " +
+                   "JOIN HabitacionReserva hr ON r.idReserva = hr.idReserva " +
                    "JOIN Habitacion h ON hr.idHabitacion = h.idHabitacion " +
                    "GROUP BY f.idFactura, f.fecha_emision, f.total_habitacion, f.total_servicios, f.total, " +
                    "c.nombre, c.apellidoPaterno, c.apellidoMaterno";
@@ -358,130 +539,56 @@ private void cargarFacturasEnTabla() {
     }
 }
 
-
-
-private void cargarReservasEnTabla() {
-    // Crear el modelo de la tabla con los encabezados correctos
-    DefaultTableModel modelo = new DefaultTableModel();
-    modelo.setColumnIdentifiers(new Object[]{
-        "ID Habitación Reserva", "Cliente", "Fecha Inicio", "Fecha Fin", "Fecha Reserva", "Habitaciones"
-    });
-
-    // Asignar el modelo a la tabla
-    TablaReservaciones.setModel(modelo);
-
-    // Consulta SQL para obtener los datos de las reservas con los detalles del cliente y habitaciones
-    String query = "SELECT hr.idHabitacionReserva, " +
+    
+    private void cargarReservaciones() {
+    // Consulta SQL para obtener los datos de las reservas con sus habitaciones y totales
+    String query = "SELECT r.idReserva, " +
                    "CONCAT(c.nombre, ' ', c.apellidoPaterno, ' ', IFNULL(c.apellidoMaterno, '')) AS cliente, " +
-                   "r.fecha_inicio, r.fecha_fin, r.fecha_reserva, " +
-                   "GROUP_CONCAT(h.idHabitacion SEPARATOR ', ') AS habitaciones " +
+                   "r.fecha_inicio, r.fecha_fin, " +
+                   "GROUP_CONCAT(h.idHabitacion ORDER BY h.idHabitacion SEPARATOR ', ') AS habitaciones, " +
+                   "SUM(h.precio) AS totalHabitacion, " +
+                   "IFNULL((SELECT SUM(s.precio) FROM Servicio s WHERE s.idReserva = r.idReserva), 0) AS totalServicios " +
                    "FROM Reserva r " +
                    "JOIN Cliente c ON r.idCliente = c.idCliente " +
                    "JOIN HabitacionReserva hr ON r.idReserva = hr.idReserva " +
                    "JOIN Habitacion h ON hr.idHabitacion = h.idHabitacion " +
-                   "GROUP BY hr.idHabitacionReserva, r.idReserva, c.nombre, c.apellidoPaterno, c.apellidoMaterno, r.fecha_inicio, r.fecha_fin, r.fecha_reserva";
+                   "GROUP BY r.idReserva, c.nombre, c.apellidoPaterno, c.apellidoMaterno, r.fecha_inicio, r.fecha_fin";
 
-    try (Connection conn = Conexion.conectar();
-         Statement stmt = conn.createStatement();
+    try (java.sql.Connection conn = Conexion.conectar();
+         java.sql.Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(query)) {
 
-        // Limpiar el modelo actual
-        modelo.setRowCount(0);
+        // Crear el modelo de la tabla con encabezados correctos
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(new Object[] {
+            "ID Reserva", "Cliente", "Fecha Inicio", "Fecha Fin", "Habitaciones", "Total Habitaciones", "Total Servicios"
+        });
+
+        // Asignar el modelo a la tabla
+        TablaReservaciones.setModel(model);
+
+        // Limpiar las filas actuales (en caso de que haya datos previos)
+        model.setRowCount(0);
 
         // Llenar el modelo con los datos obtenidos de la consulta
         while (rs.next()) {
-            Object[] fila = new Object[]{
-                rs.getInt("idHabitacionReserva"),
-                rs.getString("cliente"),
-                rs.getDate("fecha_inicio"),
-                rs.getDate("fecha_fin"),
-                rs.getTimestamp("fecha_reserva"),
-                rs.getString("habitaciones")
-            };
-            modelo.addRow(fila);
+            Object[] row = new Object[7];
+            row[0] = rs.getInt("idReserva"); // ID de la reserva
+            row[1] = rs.getString("cliente"); // Nombre completo del cliente
+            row[2] = rs.getDate("fecha_inicio"); // Fecha de inicio
+            row[3] = rs.getDate("fecha_fin"); // Fecha de fin
+            row[4] = rs.getString("habitaciones"); // Lista de habitaciones asociadas
+            row[5] = rs.getDouble("totalHabitacion"); // Total de habitaciones
+            row[6] = rs.getDouble("totalServicios"); // Total de servicios
+
+            model.addRow(row);
         }
 
     } catch (SQLException e) {
         e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al cargar las reservas: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Error al cargar las reservaciones: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
-
-    private void crearFactura() {
-    // Obtener la fila seleccionada en TablaReservas
-    int filaSeleccionada = TablaReservaciones.getSelectedRow();
-
-    if (filaSeleccionada < 0) {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione una reservación de la tabla.");
-        return;
-    }
-
-    // Obtener el idHabitacionReserva de la tabla
-    int idHabitacionReserva = Integer.parseInt(TablaReservaciones.getValueAt(filaSeleccionada, 0).toString());
-
-    // Variables para almacenar los totales
-    double totalHabitacion = 0;
-    double totalServicios = 0;
-    double total = 0;
-
-    try (Connection conn = Conexion.conectar()) {
-        // Consulta para obtener el precio de la habitación asociada a la reserva
-        String habitacionQuery = "SELECT h.precio FROM Habitacion h " +
-                                 "JOIN HabitacionReserva hr ON h.idHabitacion = hr.idHabitacion " +
-                                 "WHERE hr.idHabitacionReserva = ?";
-        
-        try (PreparedStatement pstHabitacion = conn.prepareStatement(habitacionQuery)) {
-            pstHabitacion.setInt(1, idHabitacionReserva);
-            ResultSet rsHabitacion = pstHabitacion.executeQuery();
-            
-            if (rsHabitacion.next()) {
-                totalHabitacion = rsHabitacion.getDouble("precio");
-            }
-        }
-
-        // Consulta para obtener el total de los servicios asociados a la reserva
-        String serviciosQuery = "SELECT IFNULL(SUM(s.precio), 0) AS totalServicios " +
-                                "FROM Servicio s " +
-                                "JOIN HabitacionReserva hr ON s.idReserva = hr.idReserva " +
-                                "WHERE hr.idHabitacionReserva = ?";
-
-        try (PreparedStatement pstServicios = conn.prepareStatement(serviciosQuery)) {
-            pstServicios.setInt(1, idHabitacionReserva);
-            ResultSet rsServicios = pstServicios.executeQuery();
-
-            if (rsServicios.next()) {
-                totalServicios = rsServicios.getDouble("totalServicios");
-            }
-        }
-
-        // Calcular el total final
-        total = totalHabitacion + totalServicios;
-
-        // Consulta SQL para insertar una nueva factura con los totales calculados
-        String insertQuery = "INSERT INTO Factura (idHabitacionReserva, total_habitacion, total_servicios, total) VALUES (?, ?, ?, ?)";
-
-        try (PreparedStatement pst = conn.prepareStatement(insertQuery)) {
-            pst.setInt(1, idHabitacionReserva);
-            pst.setDouble(2, totalHabitacion);
-            pst.setDouble(3, totalServicios);
-            pst.setDouble(4, total);
-
-            int filasAfectadas = pst.executeUpdate();
-
-            if (filasAfectadas > 0) {
-                JOptionPane.showMessageDialog(this, "Factura creada exitosamente con el total calculado.");
-                cargarFacturasEnTabla(); // Actualiza la tabla de facturas después de crear una nueva
-            } else {
-                JOptionPane.showMessageDialog(this, "No se pudo crear la factura.");
-            }
-        }
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al crear la factura: " + e.getMessage());
-    }
-}
-
 
 
 }
